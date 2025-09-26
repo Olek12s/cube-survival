@@ -1,0 +1,21 @@
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-core'
+
+dependencies {
+  api "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
+  api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+  api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+  api "com.badlogicgames.gdx:gdx:$gdxVersion"
+  annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+  compileOnly "org.projectlombok:lombok:$lombokVersion"
+
+  api "io.github.spair:imgui-java-binding:1.90.0"
+  api "io.github.spair:imgui-java-lwjgl3:1.90.0"
+  api "io.github.spair:imgui-java-natives-linux:1.90.0"
+  api "io.github.spair:imgui-java-natives-macos:1.90.0"
+  api "io.github.spair:imgui-java-natives-windows:1.90.0"
+
+  if(enableGraalNative == 'true') {
+    implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
+  }
+}
