@@ -20,13 +20,13 @@ public class CameraController
         camera = new OrthographicCamera();
         viewport = new FitViewport(BASE_TILES_X * TILE_SIZE, BASE_TILES_Y * TILE_SIZE, camera);
 
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+        camera.position.set(0, 0, 0);
         camera.update();
     }
 
     public void resize(int width, int height) {
         viewport.update(width, height);
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+        camera.position.set(0, 0, 0);
         camera.update();
     }
 }

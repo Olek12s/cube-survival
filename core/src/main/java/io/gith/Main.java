@@ -4,7 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import io.gith.tile.Tile;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class Main extends Game
     private Assets assetsController;
     ///////////////////     controllers       ///////////////////
 
-
+    Tile tile;
     public void create()
     {
         if (instance == null) instance = this;
@@ -44,7 +46,10 @@ public class Main extends Game
         updatables = new ArrayList<>();
         renderables = new ArrayList<>();
         batch = new SpriteBatch();
-
+        tile = new Tile.Builder()
+            .id(1)
+            .position(new Vector2(0,0))
+            .build();
         assetsController = new Assets();
         cameraController = new CameraController();
     }

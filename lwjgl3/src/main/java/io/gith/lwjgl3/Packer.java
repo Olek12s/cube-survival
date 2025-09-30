@@ -1,0 +1,10 @@
+package io.gith.lwjgl3;
+
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+
+public class Packer
+{
+    public static void main(String[] args) {
+        TexturePacker.process("assets/tiles", "assets", "tiles");
+    }
+}
