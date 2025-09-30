@@ -2,6 +2,7 @@ package io.gith.lwjgl3;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import imgui.ImGuiIO;
 import imgui.flag.ImGuiCond;
@@ -9,7 +10,7 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import imgui.ImGui;
-import io.gith.GuiRenderer;
+import io.gith.Main;
 import io.gith.Renderable;
 
 
@@ -55,7 +56,7 @@ public class Gui implements Renderable
         imGuiGl3.init("#version 150");
     }
 
-    public void startFrame() {
+    public static void startFrame() {
         if (tmpProcessor != null) {
             Gdx.input.setInputProcessor(tmpProcessor);
             tmpProcessor = null;
@@ -65,7 +66,7 @@ public class Gui implements Renderable
         ImGui.newFrame();
     }
 
-    public void endFrame() {
+    public static void endFrame() {
         ImGui.render();
         imGuiGl3.renderDrawData(ImGui.getDrawData());
 

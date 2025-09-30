@@ -1,11 +1,10 @@
-package io.gith.lwjgl3;
+package io.gith;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import io.gith.*;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class Main extends Game
 
     ///////////////////     controllers       ///////////////////
     private CameraController cameraController;
-    private Gui gui;
+    private Assets assetsController;
     ///////////////////     controllers       ///////////////////
 
 
@@ -46,17 +45,15 @@ public class Main extends Game
         renderables = new ArrayList<>();
         batch = new SpriteBatch();
 
-        Assets.load();
+        assetsController = new Assets();
         cameraController = new CameraController();
-        gui = new Gui();
-
     }
 
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
         accumulator += delta;
 
-        gui.startFrame(); // start ImGui frame
+       // gui.startFrame(); // start ImGui frame
 
         int maxUpdatesPerFrame = MAX_UPS / MAX_FPS;
         int updatesThisFrame = 0;
@@ -92,7 +89,7 @@ public class Main extends Game
         lastUpdateTime = now;
 
         draw();
-        gui.endFrame(); // render ImGui
+       // gui.endFrame(); // render ImGui
 
         long frameNow = System.nanoTime();
         currentFPS = 1f / ((frameNow - lastFrameTime) / 1_000_000_000f);
@@ -128,6 +125,3 @@ public class Main extends Game
         batch.dispose();
     }
 }
-
-// TODO: move logic to the core package
-// TODO: move platform-specific (render) to the lwjgl3
