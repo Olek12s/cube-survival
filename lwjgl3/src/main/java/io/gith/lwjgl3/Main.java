@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import io.gith.*;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -20,8 +21,8 @@ public class Main extends Game
     private ArrayList<Renderable> renderables;
 
     ///////////////////     main loop       ///////////////////
-    public static int MAX_UPS = 100;   // logic updates per second
-    public static int MAX_FPS = 100;   // rendering frames per second
+    public static int MAX_UPS = 100000;   // logic updates per second
+    public static int MAX_FPS = 100000;   // rendering frames per second
     private float logicInterval = 1f / MAX_UPS;  // seconds per logic update
     private float accumulator = 0; // acc λt
     private long lastRenderTime = 0; // to limit FPS
@@ -45,6 +46,7 @@ public class Main extends Game
         renderables = new ArrayList<>();
         batch = new SpriteBatch();
 
+        Assets.load();
         cameraController = new CameraController();
         gui = new Gui();
 
@@ -53,6 +55,8 @@ public class Main extends Game
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
         accumulator += delta;
+
+        gui.startFrame(); // start ImGui frame
 
         int maxUpdatesPerFrame = MAX_UPS / MAX_FPS;
         int updatesThisFrame = 0;
@@ -88,6 +92,7 @@ public class Main extends Game
         lastUpdateTime = now;
 
         draw();
+        gui.endFrame(); // render ImGui
 
         long frameNow = System.nanoTime();
         currentFPS = 1f / ((frameNow - lastFrameTime) / 1_000_000_000f);
@@ -122,6 +127,7 @@ public class Main extends Game
     {
         batch.dispose();
     }
-
-
 }
+
+// TODO: move logic to the core package
+// TODO: move platform-specific (render) to the lwjgl3

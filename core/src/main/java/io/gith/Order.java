@@ -1,4 +1,4 @@
-package io.gith.lwjgl3;
+package io.gith;
 
 public enum Order {
     TILE(5);

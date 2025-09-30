@@ -4,9 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import imgui.ImGuiIO;
+import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiWindowFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import imgui.ImGui;
+import io.gith.GuiRenderer;
+import io.gith.Renderable;
 
 
 public class Gui implements Renderable
@@ -18,29 +22,40 @@ public class Gui implements Renderable
 
     public Gui() {
         Main.getInstance().getRenderables().add(this);
-        initImGui();
+        init();
     }
 
     @Override
     public void render() {
+        float windowWidth = Gdx.graphics.getWidth() / 5f;
 
+        ImGui.setNextWindowPos(0, 0, ImGuiCond.Always);
+        ImGui.setNextWindowSize(windowWidth, 0, ImGuiCond.Always);
+        int windowFlags = ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize;
+        ImGui.begin("dbg", windowFlags);
+        ImGui.text(String.format("FPS: %.1f | UPS: %.1f", Main.currentFPS, Main.currentUPS));
+        ImGui.text(String.format("camera X: %.3f", Main.getInstance().getCameraController().getCamera().position.x));
+        ImGui.text(String.format("camera Y: %.3f",  Main.getInstance().getCameraController().getCamera().position.y));
+        ImGui.end();
     }
 
 
-
-    public static void initImGui() {
+    public void init() {
         imGuiGlfw = new ImGuiImplGlfw();
         imGuiGl3 = new ImGuiImplGl3();
+
         long windowHandle = ((Lwjgl3Graphics) Gdx.graphics).getWindow().getWindowHandle();
         ImGui.createContext();
         ImGuiIO io = ImGui.getIO();
         io.setIniFilename(null);
         io.getFonts().addFontDefault();
         io.getFonts().build();
+
         imGuiGlfw.init(windowHandle, true);
         imGuiGl3.init("#version 150");
     }
-    public static void startImGui() {
+
+    public void startFrame() {
         if (tmpProcessor != null) {
             Gdx.input.setInputProcessor(tmpProcessor);
             tmpProcessor = null;
@@ -49,7 +64,8 @@ public class Gui implements Renderable
         imGuiGlfw.newFrame();
         ImGui.newFrame();
     }
-    public static void endImGui() {
+
+    public void endFrame() {
         ImGui.render();
         imGuiGl3.renderDrawData(ImGui.getDrawData());
 
@@ -58,7 +74,8 @@ public class Gui implements Renderable
             Gdx.input.setInputProcessor(null);
         }
     }
-    public static void disposeImGui() {
+
+    public void dispose() {
         imGuiGl3 = null;
         imGuiGlfw = null;
         ImGui.destroyContext();

@@ -18,6 +18,7 @@ package io.gith.lwjgl3;
 
 import com.badlogic.gdx.Version;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader;
+import org.lwjgl.system.JNI;
 import org.lwjgl.system.macosx.LibC;
 import org.lwjgl.system.macosx.ObjCRuntime;
 
@@ -104,8 +105,8 @@ public class StartupHelper {
         // Checks if we are already on the main thread, such as from running via Construo.
         long objc_msgSend = ObjCRuntime.getLibrary().getFunctionAddress("objc_msgSend");
         long NSThread      = objc_getClass("NSThread");
-        long currentThread = invokePPP(NSThread, sel_getUid("currentThread"), objc_msgSend);
-        boolean isMainThread = invokePPZ(currentThread, sel_getUid("isMainThread"), objc_msgSend);
+        long currentThread = JNI.invokePPP(NSThread, sel_getUid("currentThread"), objc_msgSend);
+        boolean isMainThread = JNI.invokePPZ(currentThread, sel_getUid("isMainThread"), objc_msgSend);
         if(isMainThread) return false;
 
         long pid = LibC.getpid();
