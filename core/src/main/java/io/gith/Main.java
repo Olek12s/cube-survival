@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import io.gith.tile.Chunk;
 import io.gith.tile.Tile;
+import io.gith.tile.TileMapController;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -36,9 +38,9 @@ public class Main extends Game
     ///////////////////     controllers       ///////////////////
     private CameraController cameraController;
     private Assets assetsController;
+    private TileMapController tileMap;
     ///////////////////     controllers       ///////////////////
 
-    Tile tile;
     public void create()
     {
         if (instance == null) instance = this;
@@ -46,12 +48,21 @@ public class Main extends Game
         updatables = new ArrayList<>();
         renderables = new ArrayList<>();
         batch = new SpriteBatch();
-        tile = new Tile.Builder()
-            .id(1)
-            .position(new Vector2(0,0))
-            .build();
         assetsController = new Assets();
         cameraController = new CameraController();
+        tileMap = new TileMapController();
+
+        Chunk chunk = new Chunk(new Vector2(0,0));
+        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
+            for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
+                Tile tile = new Tile.Builder()
+                    .id(0)
+                    .position(new Vector2(i * CameraController.TILE_SIZE, j * CameraController.TILE_SIZE))
+                    .build();
+                chunk.setTile(tile, i, j);
+            }
+        }
+        tileMap.putChunkOnMap(chunk);
     }
 
     public void render() {

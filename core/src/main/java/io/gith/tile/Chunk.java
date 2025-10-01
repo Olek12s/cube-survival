@@ -1,35 +1,43 @@
 package io.gith.tile;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class Chunk {
     public static final int CHUNK_SIZE = 16;
-    private Tile[][] tiles = new Tile[CHUNK_SIZE][CHUNK_SIZE];
-    private int chunkX, chunkY;
+    private Tile[][] tiles;
+    private Vector2 position;
 
-    public Chunk(int chunkX, int chunkY) {
-        this.chunkX = chunkX;
-        this.chunkY = chunkY;
+    public Chunk(Vector2 position) {
+        tiles = new Tile[CHUNK_SIZE][CHUNK_SIZE];
+        this.position = position;
     }
 
-    public void setTile(int x, int y, Tile tile) {
+    public void setTile(Tile tile, int x, int y) {
         tiles[x][y] = tile;
     }
-
     public Tile getTile(int x, int y) {
         return tiles[x][y];
     }
-
     public int getWorldX() {
-        return chunkX * CHUNK_SIZE;
+        return (int)position.x * CHUNK_SIZE;
     }
-
     public int getWorldY() {
-        return chunkY * CHUNK_SIZE;
+        return (int)position.y * CHUNK_SIZE;
     }
-
     public Tile[][] getTiles() {
         return tiles;
+    }
+
+
+    protected void render()
+    {
+        for (int x = 0; x < tiles.length; x++) {
+            for (int y = 0; y < tiles[0].length; y++) {
+                if (tiles[x][y] == null) continue;  // don't try to render null tile
+                tiles[x][y].render();
+            }
+        }
     }
 }
