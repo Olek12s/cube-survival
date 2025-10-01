@@ -26,4 +26,12 @@ public enum TileID
         }
         throw new IllegalArgumentException("Unknown tile name: " + name);
     }
+
+    public static TileID fromValue(int value) {
+        for (TileID id : values()) {
+            if (id.value == value) return id;
+        }
+        throw new IllegalArgumentException("Unknown tile id: " + value);
+    }
+
 }

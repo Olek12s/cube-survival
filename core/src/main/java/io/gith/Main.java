@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.gith.tile.Chunk;
 import io.gith.tile.Tile;
+import io.gith.tile.TileID;
 import io.gith.tile.TileMapController;
 import lombok.Getter;
 
@@ -36,6 +37,7 @@ public class Main extends Game
     ///////////////////     main loop       ///////////////////
 
     ///////////////////     controllers       ///////////////////
+    private InputController inputController;
     private CameraController cameraController;
     private Assets assetsController;
     private TileMapController tileMap;
@@ -49,20 +51,52 @@ public class Main extends Game
         renderables = new ArrayList<>();
         batch = new SpriteBatch();
         assetsController = new Assets();
+        inputController = new InputController();
         cameraController = new CameraController();
         tileMap = new TileMapController();
 
-        Chunk chunk = new Chunk(new Vector2(0,0));
+        Chunk chunk1 = new Chunk(new Vector2(0,0));
         for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
             for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
                 Tile tile = new Tile.Builder()
-                    .id(0)
-                    .position(new Vector2(i * CameraController.TILE_SIZE, j * CameraController.TILE_SIZE))
+                    .id(TileID.GRASS)
+                    .position(new Vector2(
+                        chunk1.getPosition().x + i * CameraController.TILE_SIZE,
+                        chunk1.getPosition().y + j * CameraController.TILE_SIZE))
                     .build();
-                chunk.setTile(tile, i, j);
+                chunk1.setTile(tile, i, j);
             }
         }
-        tileMap.putChunkOnMap(chunk);
+        tileMap.putChunkOnMap(chunk1);
+        Chunk chunk2 = new Chunk(new Vector2(Chunk.CHUNK_SIZE * CameraController.TILE_SIZE,0));
+        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
+            for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
+                Tile tile = new Tile.Builder()
+                    .id(TileID.SAND)
+                    .position(new Vector2(
+                        chunk2.getPosition().x + i * CameraController.TILE_SIZE,
+                        chunk2.getPosition().y + j * CameraController.TILE_SIZE))
+                    .build();
+                chunk2.setTile(tile, i, j);
+            }
+        }
+        tileMap.putChunkOnMap(chunk2);
+
+        Chunk chunk3 = new Chunk(new Vector2(0,-Chunk.CHUNK_SIZE * CameraController.TILE_SIZE));
+        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
+            for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
+                Tile tile = new Tile.Builder()
+                    .id(TileID.STONE)
+                    .position(new Vector2(
+                        chunk3.getPosition().x + i * CameraController.TILE_SIZE,
+                        chunk3.getPosition().y + j * CameraController.TILE_SIZE))
+                    .build();
+                chunk3.setTile(tile, i, j);
+            }
+        }
+        tileMap.putChunkOnMap(chunk3);
+        Chunk chunk4 = new Chunk(new Vector2(Chunk.CHUNK_SIZE * CameraController.TILE_SIZE,-Chunk.CHUNK_SIZE * CameraController.TILE_SIZE));
+        tileMap.putChunkOnMap(chunk4);
     }
 
     public void render() {

@@ -31,7 +31,7 @@ public class TileMapController implements Renderable
         for (int x = 0; x < Chunk.CHUNK_SIZE; x++) {
             for (int y = 0; y < Chunk.CHUNK_SIZE; y++) {
                 Tile tile = new Tile.Builder()
-                    .id(tileIDs[x][y])
+                    .id(TileID.fromValue(tileIDs[x][y]))
                     .position(new Vector2(
                         (chunkPos.x * Chunk.CHUNK_SIZE + x) * CameraController.TILE_SIZE,
                         (chunkPos.y * Chunk.CHUNK_SIZE + y) * CameraController.TILE_SIZE
@@ -64,6 +64,22 @@ public class TileMapController implements Renderable
         */
         chunk.setTile(tile, localX, localY);
     }
+
+    public Tile getTileAtWorld(int worldTileX, int worldTileY) {
+        int chunkX = (int) Math.floor((float) worldTileX / Chunk.CHUNK_SIZE);
+        int chunkY = (int) Math.floor((float) worldTileY / Chunk.CHUNK_SIZE);
+
+        Chunk chunk = getChunkFromMap(chunkX, chunkY);
+        if (chunk == null) {
+            return null;
+        }
+
+        int localX = Math.floorMod(worldTileX, Chunk.CHUNK_SIZE);
+        int localY = Math.floorMod(worldTileY, Chunk.CHUNK_SIZE);
+
+        return chunk.getTile(localX, localY);
+    }
+
 
 
 

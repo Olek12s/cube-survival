@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class Chunk {
-    public static final int CHUNK_SIZE = 16;
+    public static final int CHUNK_SIZE = 8;
     private Tile[][] tiles;
     private Vector2 position;
 
@@ -26,6 +26,7 @@ public class Chunk {
     public int getWorldY() {
         return (int)position.y * CHUNK_SIZE;
     }
+    public Vector2 getPosition() {return position;}
     public Tile[][] getTiles() {
         return tiles;
     }
