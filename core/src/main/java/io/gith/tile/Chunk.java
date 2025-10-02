@@ -7,11 +7,11 @@ import static io.gith.CameraController.TILE_SIZE;
 public class Chunk {
     public static final int CHUNK_SIZE = 8;
     private Tile[][] tiles;
-    private Vector2 position;
+    private Vector2 indexPosition;
 
-    public Chunk(Vector2 position) {
+    public Chunk(Vector2 indexPosition) {
         tiles = new Tile[CHUNK_SIZE][CHUNK_SIZE];
-        this.position = position;
+        this.indexPosition = indexPosition;
     }
 
     public void setTile(Tile tile, int x, int y) {
@@ -20,19 +20,19 @@ public class Chunk {
     public Tile getTile(int x, int y) {
         return tiles[x][y];
     }
-    public int getX() {
-        return (int)position.x * CHUNK_SIZE;
+    public int getIndexX() {
+        return (int) indexPosition.x * CHUNK_SIZE;
     }
-    public int getY() {
-        return (int)position.y * CHUNK_SIZE;
+    public int getIndexY() {
+        return (int) indexPosition.y * CHUNK_SIZE;
     }
-    public Vector2 getPosition() {return position;}
+    public Vector2 getIndexPosition() {return indexPosition;}
     public Tile[][] getTiles() {
         return tiles;
     }
     public Vector2 getWorldPosition() {return new Vector2(getWorldX(), getWorldY());}
-    public int getWorldX() {return (int)(getX() * TILE_SIZE);}
-    public int getWorldY() {return (int)(getY() * TILE_SIZE);}
+    public int getWorldX() {return (int)(getIndexX() * TILE_SIZE);}
+    public int getWorldY() {return (int)(getIndexY() * TILE_SIZE);}
 
 
     protected void render()

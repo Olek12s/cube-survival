@@ -31,15 +31,18 @@ public class Autotiler
      */
     public static byte calcBitmask(Tile tile) {
         TileMapController tileMapController = Main.getInstance().getTileMap();
-        byte bitmask = 0b0000_0000;
+        Tile[] tiles = tileMapController.getTileNeighbors(tile);
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-          //      if (tileMapController.ge)
+
+        byte bitmask = 0b0000_0000;
+        for (int i = 0; i < 8; i++) {
+            if (tiles[i] == null || tiles[i].getId() == tile.getId()) { // same or not loaded
+                continue;
+            }
+            else {
+                bitmask |= (byte) (1 << i);
             }
         }
-
-
         return bitmask;
     }
 }

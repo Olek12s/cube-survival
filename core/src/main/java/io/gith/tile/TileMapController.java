@@ -22,7 +22,7 @@ public class TileMapController implements Renderable
     }
 
     public void putChunkOnMap(Chunk chunk) {
-        Vector2 key = new Vector2(chunk.getX(), chunk.getY());
+        Vector2 key = new Vector2(chunk.getIndexX(), chunk.getIndexY());
         chunks.put(key, chunk);
     }
 
@@ -45,8 +45,8 @@ public class TileMapController implements Renderable
     }
 
     public void replaceOrSetTile(Tile tile) {
-        int worldTileX = (int)(tile.getPosition().x);
-        int worldTileY = (int)(tile.getPosition().y);
+        int worldTileX = (int)(tile.getIndexPosition().x);
+        int worldTileY = (int)(tile.getIndexPosition().y);
 
         int chunkX = worldTileX / Chunk.CHUNK_SIZE;
         int chunkY = worldTileY / Chunk.CHUNK_SIZE;
@@ -83,8 +83,8 @@ public class TileMapController implements Renderable
     public Tile[] getTileNeighbors(Tile tile) {
         Tile[] neighbors = new Tile[8];
 
-        int worldX = (int) tile.getPosition().x;
-        int worldY = (int) tile.getPosition().y;
+        int x = (int) tile.getIndexPosition().x;
+        int y = (int) tile.getIndexPosition().y;
 
         int[][] offsets = {
             {0, 1},  // N
@@ -98,8 +98,8 @@ public class TileMapController implements Renderable
         };
 
         for (int i = 0; i < offsets.length; i++) {
-            int nx = worldX + offsets[i][0];
-            int ny = worldY + offsets[i][1];
+            int nx = x + offsets[i][0];
+            int ny = y + offsets[i][1];
             neighbors[i] = getTileAtWorld(nx, ny);
         }
         return neighbors;

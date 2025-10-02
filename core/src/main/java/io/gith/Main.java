@@ -61,8 +61,8 @@ public class Main extends Game
                 Tile tile = new Tile.Builder()
                     .id(TileID.GRASS)
                     .position(new Vector2(
-                        chunk1.getPosition().x + i,
-                        chunk1.getPosition().y + j))
+                        chunk1.getIndexPosition().x + i,
+                        chunk1.getIndexPosition().y + j))
                     .build();
                 chunk1.setTile(tile, i, j);
                 if (j == 5)
@@ -70,8 +70,8 @@ public class Main extends Game
                     tile = new Tile.Builder()
                         .id(TileID.STONE)
                         .position(new Vector2(
-                            chunk1.getPosition().x + i,
-                            chunk1.getPosition().y + j))
+                            chunk1.getIndexPosition().x + i,
+                            chunk1.getIndexPosition().y + j))
                         .build();
                     chunk1.setTile(tile, i, j);
                 }
@@ -84,8 +84,8 @@ public class Main extends Game
                 Tile tile = new Tile.Builder()
                     .id(TileID.SAND)
                     .position(new Vector2(
-                        chunk2.getPosition().x + i,
-                        chunk2.getPosition().y + j))
+                        chunk2.getIndexPosition().x + i,
+                        chunk2.getIndexPosition().y + j))
                     .build();
                 chunk2.setTile(tile, i, j);
             }
@@ -98,8 +98,8 @@ public class Main extends Game
                 Tile tile = new Tile.Builder()
                     .id(TileID.STONE)
                     .position(new Vector2(
-                        chunk3.getPosition().x + i,
-                        chunk3.getPosition().y + j))
+                        chunk3.getIndexPosition().x + i,
+                        chunk3.getIndexPosition().y + j))
                     .build();
                 chunk3.setTile(tile, i, j);
             }
