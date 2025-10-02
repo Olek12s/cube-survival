@@ -61,41 +61,51 @@ public class Main extends Game
                 Tile tile = new Tile.Builder()
                     .id(TileID.GRASS)
                     .position(new Vector2(
-                        chunk1.getPosition().x + i * CameraController.TILE_SIZE,
-                        chunk1.getPosition().y + j * CameraController.TILE_SIZE))
+                        chunk1.getPosition().x + i,
+                        chunk1.getPosition().y + j))
                     .build();
                 chunk1.setTile(tile, i, j);
+                if (j == 5)
+                {
+                    tile = new Tile.Builder()
+                        .id(TileID.STONE)
+                        .position(new Vector2(
+                            chunk1.getPosition().x + i,
+                            chunk1.getPosition().y + j))
+                        .build();
+                    chunk1.setTile(tile, i, j);
+                }
             }
         }
         tileMap.putChunkOnMap(chunk1);
-        Chunk chunk2 = new Chunk(new Vector2(Chunk.CHUNK_SIZE * CameraController.TILE_SIZE,0));
+        Chunk chunk2 = new Chunk(new Vector2(Chunk.CHUNK_SIZE,0));
         for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
             for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
                 Tile tile = new Tile.Builder()
                     .id(TileID.SAND)
                     .position(new Vector2(
-                        chunk2.getPosition().x + i * CameraController.TILE_SIZE,
-                        chunk2.getPosition().y + j * CameraController.TILE_SIZE))
+                        chunk2.getPosition().x + i,
+                        chunk2.getPosition().y + j))
                     .build();
                 chunk2.setTile(tile, i, j);
             }
         }
         tileMap.putChunkOnMap(chunk2);
 
-        Chunk chunk3 = new Chunk(new Vector2(0,-Chunk.CHUNK_SIZE * CameraController.TILE_SIZE));
+        Chunk chunk3 = new Chunk(new Vector2(0,-Chunk.CHUNK_SIZE));
         for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
             for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
                 Tile tile = new Tile.Builder()
                     .id(TileID.STONE)
                     .position(new Vector2(
-                        chunk3.getPosition().x + i * CameraController.TILE_SIZE,
-                        chunk3.getPosition().y + j * CameraController.TILE_SIZE))
+                        chunk3.getPosition().x + i,
+                        chunk3.getPosition().y + j))
                     .build();
                 chunk3.setTile(tile, i, j);
             }
         }
         tileMap.putChunkOnMap(chunk3);
-        Chunk chunk4 = new Chunk(new Vector2(Chunk.CHUNK_SIZE * CameraController.TILE_SIZE,-Chunk.CHUNK_SIZE * CameraController.TILE_SIZE));
+        Chunk chunk4 = new Chunk(new Vector2(Chunk.CHUNK_SIZE,-Chunk.CHUNK_SIZE));
         tileMap.putChunkOnMap(chunk4);
     }
 

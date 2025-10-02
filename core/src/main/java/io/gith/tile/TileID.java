@@ -2,9 +2,9 @@ package io.gith.tile;
 
 public enum TileID
 {
-    GRASS(0, "grass"),
-    STONE(1, "stone"),
-    SAND(2, "sand");
+    GRASS(0, "grass47"),
+    STONE(1, "stone47"),
+    SAND(2, "sand47");
 
     private final int value;
     private final String name;
