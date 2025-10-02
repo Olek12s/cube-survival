@@ -1,8 +1,8 @@
 package io.gith.tile;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
+
+import static io.gith.CameraController.TILE_SIZE;
 
 public class Chunk {
     public static final int CHUNK_SIZE = 8;
@@ -20,16 +20,19 @@ public class Chunk {
     public Tile getTile(int x, int y) {
         return tiles[x][y];
     }
-    public int getWorldX() {
+    public int getX() {
         return (int)position.x * CHUNK_SIZE;
     }
-    public int getWorldY() {
+    public int getY() {
         return (int)position.y * CHUNK_SIZE;
     }
     public Vector2 getPosition() {return position;}
     public Tile[][] getTiles() {
         return tiles;
     }
+    public Vector2 getWorldPosition() {return new Vector2(getWorldX(), getWorldY());}
+    public int getWorldX() {return (int)(getX() * TILE_SIZE);}
+    public int getWorldY() {return (int)(getY() * TILE_SIZE);}
 
 
     protected void render()

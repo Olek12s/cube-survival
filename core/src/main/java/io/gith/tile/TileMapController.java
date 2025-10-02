@@ -22,7 +22,7 @@ public class TileMapController implements Renderable
     }
 
     public void putChunkOnMap(Chunk chunk) {
-        Vector2 key = new Vector2(chunk.getWorldX(), chunk.getWorldY());
+        Vector2 key = new Vector2(chunk.getX(), chunk.getY());
         chunks.put(key, chunk);
     }
 
@@ -78,6 +78,31 @@ public class TileMapController implements Renderable
         int localY = Math.floorMod(worldTileY, Chunk.CHUNK_SIZE);
 
         return chunk.getTile(localX, localY);
+    }
+
+    public Tile[] getTileNeighbors(Tile tile) {
+        Tile[] neighbors = new Tile[8];
+
+        int worldX = (int) tile.getPosition().x;
+        int worldY = (int) tile.getPosition().y;
+
+        int[][] offsets = {
+            {0, 1},  // N
+            {1, 1},  // NE
+            {1, 0},  // E
+            {1, -1}, // SE
+            {0, -1}, // S
+            {-1, -1},// SW
+            {-1, 0}, // W
+            {-1, 1}  // NW
+        };
+
+        for (int i = 0; i < offsets.length; i++) {
+            int nx = worldX + offsets[i][0];
+            int ny = worldY + offsets[i][1];
+            neighbors[i] = getTileAtWorld(nx, ny);
+        }
+        return neighbors;
     }
 
 
