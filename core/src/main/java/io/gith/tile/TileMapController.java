@@ -96,7 +96,7 @@ public class TileMapController implements Renderable
         for (Chunk chunk : chunks.values()) {
             for (int x = 0; x < Chunk.CHUNK_SIZE; x++) {
                 for (int y = 0; y < Chunk.CHUNK_SIZE; y++) {
-                    chunk.getTileLocalCoords(x, y).setBitmask();
+                    chunk.getTileLocalCoords(x, y).updateBitmask();
                 }
             }
         }
@@ -152,11 +152,9 @@ public class TileMapController implements Renderable
             return null;
         }
 
-        // tutaj zwykłe przesunięcie zamiast floorMod!
         int localX = indexX - chunkX * Chunk.CHUNK_SIZE;
         int localY = indexY - chunkY * Chunk.CHUNK_SIZE;
 
-        // sprawdzamy czy lokalne współrzędne mieszczą się w granicach chunka
         if (localX < 0 || localX >= Chunk.CHUNK_SIZE || localY < 0 || localY >= Chunk.CHUNK_SIZE) {
             return null;
         }
