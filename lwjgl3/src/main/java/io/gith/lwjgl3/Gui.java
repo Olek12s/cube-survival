@@ -20,6 +20,10 @@ public class Gui implements Renderable
     private static ImGuiImplGl3 imGuiGl3;
     private static InputProcessor tmpProcessor;
 
+    public static float lastUpdateTimeMs = 0;
+    public static float lastRenderTimeMs = 0;
+    public static float lastFrameTimeMs = 0;
+
 
     public Gui() {
         Main.getInstance().getRenderables().add(this);
@@ -37,6 +41,13 @@ public class Gui implements Renderable
         ImGui.text(String.format("FPS: %.1f | UPS: %.1f", Main.currentFPS, Main.currentUPS));
         ImGui.text(String.format("camera X: %.3f", Main.getInstance().getCameraController().getCamera().position.x));
         ImGui.text(String.format("camera Y: %.3f",  Main.getInstance().getCameraController().getCamera().position.y));
+
+        ImGui.separator();
+        ImGui.text(String.format("Update time: %.1f µs", Main.lastUpdateTimeUs));
+        ImGui.text(String.format("Render time: %.1f µs", Main.lastRenderTimeUs));
+        ImGui.text(String.format("Frame (U+R) time: %.1f µs", Main.lastFrameTimeUs));
+
+
         ImGui.end();
     }
 

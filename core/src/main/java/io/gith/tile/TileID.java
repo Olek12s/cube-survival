@@ -4,7 +4,9 @@ public enum TileID
 {
     GRASS(0, "grass47"),
     STONE(1, "stone47"),
-    SAND(2, "sand47");
+    SAND(2, "sand47"),
+    GRASS2(2, "grass"),
+    DIRT2(2, "Dirt");
 
     private final int value;
     private final String name;

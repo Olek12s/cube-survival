@@ -34,6 +34,10 @@ public class Main extends Game
     public static float currentUPS = 0;
     private long lastFrameTime = System.nanoTime();
     private long lastUpdateTime = System.nanoTime();
+
+    public static float lastUpdateTimeUs = 0;
+    public static float lastRenderTimeUs = 0;
+    public static float lastFrameTimeUs = 0;
     ///////////////////     main loop       ///////////////////
 
     ///////////////////     controllers       ///////////////////
@@ -54,59 +58,7 @@ public class Main extends Game
         inputController = new InputController();
         cameraController = new CameraController();
         tileMap = new TileMapController();
-
-        Chunk chunk1 = new Chunk(new Vector2(0,0));
-        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
-            for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
-                Tile tile = new Tile.Builder()
-                    .id(TileID.GRASS)
-                    .position(new Vector2(
-                        chunk1.getIndexPosition().x + i,
-                        chunk1.getIndexPosition().y + j))
-                    .build();
-                chunk1.setTile(tile, i, j);
-                if (j == 5)
-                {
-                    tile = new Tile.Builder()
-                        .id(TileID.STONE)
-                        .position(new Vector2(
-                            chunk1.getIndexPosition().x + i,
-                            chunk1.getIndexPosition().y + j))
-                        .build();
-                    chunk1.setTile(tile, i, j);
-                }
-            }
-        }
-        tileMap.putChunkOnMap(chunk1);
-        Chunk chunk2 = new Chunk(new Vector2(Chunk.CHUNK_SIZE,0));
-        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
-            for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
-                Tile tile = new Tile.Builder()
-                    .id(TileID.SAND)
-                    .position(new Vector2(
-                        chunk2.getIndexPosition().x + i,
-                        chunk2.getIndexPosition().y + j))
-                    .build();
-                chunk2.setTile(tile, i, j);
-            }
-        }
-        tileMap.putChunkOnMap(chunk2);
-
-        Chunk chunk3 = new Chunk(new Vector2(0,-Chunk.CHUNK_SIZE));
-        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
-            for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
-                Tile tile = new Tile.Builder()
-                    .id(TileID.STONE)
-                    .position(new Vector2(
-                        chunk3.getIndexPosition().x + i,
-                        chunk3.getIndexPosition().y + j))
-                    .build();
-                chunk3.setTile(tile, i, j);
-            }
-        }
-        tileMap.putChunkOnMap(chunk3);
-        Chunk chunk4 = new Chunk(new Vector2(Chunk.CHUNK_SIZE,-Chunk.CHUNK_SIZE));
-        tileMap.putChunkOnMap(chunk4);
+        tileMap.loadFirstChunks();
     }
 
     public void render() {
@@ -118,6 +70,7 @@ public class Main extends Game
         int maxUpdatesPerFrame = MAX_UPS / MAX_FPS;
         int updatesThisFrame = 0;
 
+        long updateStart = System.nanoTime();
         while (accumulator >= logicInterval && updatesThisFrame < maxUpdatesPerFrame) {
             for (Updatable u : updatables) {
                 u.update(logicInterval);
@@ -125,6 +78,8 @@ public class Main extends Game
             accumulator -= logicInterval;
             updatesThisFrame++;
         }
+        long updateEnd = System.nanoTime();
+        lastUpdateTimeUs = (updateEnd - updateStart) / 1_000f;
 
         if (updatesThisFrame == maxUpdatesPerFrame) {
             accumulator = 0;
@@ -148,12 +103,13 @@ public class Main extends Game
         currentUPS = updatesThisFrame / ((now - lastUpdateTime) / 1_000_000_000f);
         lastUpdateTime = now;
 
+        long renderStart = System.nanoTime();
         draw();
-       // gui.endFrame(); // render ImGui
-
-        long frameNow = System.nanoTime();
-        currentFPS = 1f / ((frameNow - lastFrameTime) / 1_000_000_000f);
-        lastFrameTime = frameNow;
+        long renderEnd = System.nanoTime();
+        lastRenderTimeUs = (renderEnd - renderStart) / 1_000f;
+        currentFPS = 1f / ((now - lastFrameTime) / 1_000_000_000f);
+        lastFrameTime = now;
+        lastFrameTimeUs = lastUpdateTimeUs + lastRenderTimeUs;
     }
 
 
