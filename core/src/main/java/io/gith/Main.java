@@ -25,19 +25,21 @@ public class Main extends Game
     private ArrayList<Renderable> renderables;
 
     ///////////////////     main loop       ///////////////////
-    public static int MAX_UPS = 100000;   // logic updates per second
-    public static int MAX_FPS = 100000;   // rendering frames per second
+    public static int MAX_UPS = 75;   // logic updates per second
+    public static int MAX_FPS = 75;   // rendering frames per second
     private float logicInterval = 1f / MAX_UPS;  // seconds per logic update
     private float accumulator = 0; // acc λt
-    private long lastRenderTime = 0; // to limit FPS
-    public static float currentFPS = 0;
-    public static float currentUPS = 0;
-    private long lastFrameTime = System.nanoTime();
-    private long lastUpdateTime = System.nanoTime();
 
+    ///////////////////     performance metrics       ///////////////////
+    public static float currentFPS = 0f;
+    public static float currentUPS = 0f;
     public static float lastUpdateTimeUs = 0;
     public static float lastRenderTimeUs = 0;
     public static float lastFrameTimeUs = 0;
+
+    private long lastUpdateTime = System.nanoTime();
+    private long lastRenderTime = System.nanoTime();
+    private long lastFrameTime = System.nanoTime();
     ///////////////////     main loop       ///////////////////
 
     ///////////////////     controllers       ///////////////////
@@ -61,56 +63,52 @@ public class Main extends Game
         tileMap.loadFirstChunks();
     }
 
+
+    @Override
     public void render() {
-        float delta = Gdx.graphics.getDeltaTime();
-        accumulator += delta;
-
-       // gui.startFrame(); // start ImGui frame
-
-        int maxUpdatesPerFrame = MAX_UPS / MAX_FPS;
-        int updatesThisFrame = 0;
+        float dt = Gdx.graphics.getDeltaTime();
+        accumulator += dt;
 
         long updateStart = System.nanoTime();
-        while (accumulator >= logicInterval && updatesThisFrame < maxUpdatesPerFrame) {
+        int updatesThisFrame = 0;
+
+        // --- update ---
+        while (accumulator >= logicInterval) {
             for (Updatable u : updatables) {
                 u.update(logicInterval);
             }
             accumulator -= logicInterval;
             updatesThisFrame++;
         }
+
         long updateEnd = System.nanoTime();
-        lastUpdateTimeUs = (updateEnd - updateStart) / 1_000f;
+        lastUpdateTimeUs = (updateEnd - updateStart) / 1_000f; // µs
 
-        if (updatesThisFrame == maxUpdatesPerFrame) {
-            accumulator = 0;
-        }
-
-        if (MAX_FPS > 0) {
-            long now = System.nanoTime();
-            long minFrameTime = 1_000_000_000L / MAX_FPS;
-            if (lastRenderTime > 0) {
-                long frameDuration = now - lastRenderTime;
-                if (frameDuration < minFrameTime) {
-                    try {
-                        Thread.sleep((minFrameTime - frameDuration) / 1_000_000L);
-                    } catch (InterruptedException ignored) {
-                    }
-                }
-            }
-            lastRenderTime = System.nanoTime();
-        }
+        // --- UPS ---
         long now = System.nanoTime();
-        currentUPS = updatesThisFrame / ((now - lastUpdateTime) / 1_000_000_000f);
+        float elapsedSecSinceLastUpdate = (now - lastUpdateTime) / 1_000_000_000f;
+        if (elapsedSecSinceLastUpdate > 0) {
+            currentUPS = updatesThisFrame / elapsedSecSinceLastUpdate;
+        }
         lastUpdateTime = now;
 
+
+        // --- render ---
         long renderStart = System.nanoTime();
         draw();
         long renderEnd = System.nanoTime();
-        lastRenderTimeUs = (renderEnd - renderStart) / 1_000f;
-        currentFPS = 1f / ((now - lastFrameTime) / 1_000_000_000f);
+        lastRenderTimeUs = (renderEnd - renderStart) / 1_000f; // µs
+
+        // --- FPS ---
+        float frameTimeSec = (now - lastFrameTime) / 1_000_000_000f;
+        if (frameTimeSec > 0) {
+            currentFPS = 1f / frameTimeSec;
+        }
         lastFrameTime = now;
+
         lastFrameTimeUs = lastUpdateTimeUs + lastRenderTimeUs;
     }
+
 
 
 

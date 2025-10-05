@@ -13,7 +13,7 @@ public class Autotiler
     private static final int ATLAS_WIDTH = 7;
 
     static {
-        maskToVariant.put((byte) 0b1110_0011, new Pair<>(0, 0));
+        maskToVariant.put((byte)0b1110_0011, new Pair<>(0, 0));
         maskToVariant.put((byte)0b1000_0011, new Pair<>(1, 0));
         maskToVariant.put((byte)0b1000_1111, new Pair<>(2, 0));
         maskToVariant.put((byte)0b1110_1111, new Pair<>(3, 0));
@@ -22,7 +22,7 @@ public class Autotiler
         maskToVariant.put((byte)0b1010_0000, new Pair<>(6, 0));
 
         maskToVariant.put((byte)0b1110_0000, new Pair<>(0, 1));
-        maskToVariant.put((byte)0b1111_1111, new Pair<>(1, 1));
+        maskToVariant.put((byte)0b0000_0000, new Pair<>(1, 1));
         maskToVariant.put((byte)0b0000_1110, new Pair<>(2, 1));
         maskToVariant.put((byte)0b1110_1110, new Pair<>(3, 1));
         maskToVariant.put((byte)0b0000_0010, new Pair<>(4, 1));
@@ -39,8 +39,8 @@ public class Autotiler
 
         maskToVariant.put((byte)0b1111_1011, new Pair<>(0, 3));
         maskToVariant.put((byte)0b0100_0100, new Pair<>(1, 3));
-        maskToVariant.put((byte)0b0100_0000, new Pair<>(2, 3));
-        maskToVariant.put((byte)0b0000_0000, new Pair<>(3, 3));
+        maskToVariant.put((byte)0b0100_0000, new Pair<>(0, 1));
+        maskToVariant.put((byte)0b1111_1111, new Pair<>(3, 3));
         maskToVariant.put((byte)0b0010_1010, new Pair<>(4, 3));
         maskToVariant.put((byte)0b1010_0010, new Pair<>(5, 3));
         maskToVariant.put((byte)0b0010_1000, new Pair<>(6, 3));
@@ -68,57 +68,68 @@ public class Autotiler
         maskToVariant.put((byte)0b1111_1010, new Pair<>(4, 6));
         maskToVariant.put((byte)0b1011_1010, new Pair<>(5, 6));
         maskToVariant.put((byte)0b1011_1110, new Pair<>(6, 6));
+
+        maskToVariant.put((byte)0b0000_0001, new Pair<>(1, 0)); // 1    N
+        maskToVariant.put((byte)0b0100_0001, new Pair<>(0, 0)); // 65   N W
+        maskToVariant.put((byte)0b0000_0101, new Pair<>(2, 0)); // 5    N E
+        maskToVariant.put((byte)0b0000_0100, new Pair<>(2, 1)); // 4    E
+        maskToVariant.put((byte)0b0001_0000, new Pair<>(1, 2)); // 16   S
+        maskToVariant.put((byte)0b0101_0000, new Pair<>(0, 2)); // 80   S W
+        maskToVariant.put((byte)0b0001_1100, new Pair<>(2, 2)); // 28   E SE S
+        maskToVariant.put((byte)0b0001_0001, new Pair<>(1, 3)); // 17   N S
+        maskToVariant.put((byte)0b0000_0111, new Pair<>(2, 0)); // 7    N NE E
+        maskToVariant.put((byte)0b0001_0100, new Pair<>(2, 2)); // 20   E S
+
+
     }
 
 
     public static int getTextureVariantFromMask(byte mask) {
-        if (mask < 0) System.out.println("NEgATIVE");
         Pair<Integer, Integer> variant = maskToVariant.get(mask);
 ;
         if (variant == null) {
+            String bin = String.format("%8s", Integer.toBinaryString(mask & 0xFF))
+                .replace(' ', '0');
+            System.out.println("variation does not exist for: " + bin + " (" + mask + ")");
             return 0;
         }
         return variant.first() + variant.second() * ATLAS_WIDTH;
     }
 
 
-    /**
-     *  bitmask goes clockwise from North. LSB - North MSB - NorthWest
-     *
-     *  N   - 0. bit (LSB)
-     *  NE  - 1. bit
-     *  E   - 2. bit
-     *  SE  - 3. bit
-     *  S   - 4. bit
-     *  SW  - 5. bit
-     *  W   - 6. bit
-     *  NW  - 7. bit (MSB)
-     *
-     * @param tile   target tile
-     */
+
     public static void assignBitmask(Tile tile) {
         Tile[] neighboringTiles = Main.getInstance().getTileMap().getTileNeighbors(tile);
 
+        int[] axialIndices = {0, 2, 4, 6}; // N, E, S, W
         byte bitmask = 0b0000_0000;
-        for (int i = 0; i < neighboringTiles.length; i++) {
-            if (neighboringTiles[i] == null || neighboringTiles[i].getId() == tile.getId()) {
-                continue;
-            }
-            else    // filling bit in bitmask
-            {
-                bitmask = (byte) (bitmask | (1 << i));
+
+        for (int idx : axialIndices) {
+            Tile neighbor = neighboringTiles[idx];
+            if (neighbor != null && neighbor.getId() != tile.getId()) {
+                bitmask |= (byte) (1 << idx);   // set bit
             }
         }
 
-        String bin = String.format("%8s", Integer.toBinaryString(bitmask & 0xFF)).replace(' ', '0');
-        System.out.println("Tile " + tile.getIndexPosition() + " -> bitmask: " + bin);
+        int[][] cornerIndices = {
+            {1, 0, 2}, // NE - requires N, E
+            {3, 4, 2}, // SE - requires S, E
+            {5, 4, 6}, // SW - requires S, W
+            {7, 0, 6}  // NW - requires N, W
+        };
 
-        System.out.println(">>>>>tile: " + tile.getIndexPosition());
-        for (Tile n : neighboringTiles) {
-            if (n == null) System.out.println("null");
-            else System.out.println(": " + n.getIndexPosition());
+        for (int[] corner : cornerIndices) {
+            int cornerBit = corner[0];
+            int axial1 = corner[1];
+            int axial2 = corner[2];
+
+            Tile neighbor = neighboringTiles[cornerBit];
+            if (neighbor != null && neighbor.getId() != tile.getId()) {
+                if ((bitmask & (1 << axial1)) == 0 && (bitmask & (1 << axial2)) == 0) {
+                    bitmask |= (byte) (1 << cornerBit);     // set bit for corner
+                }
+            }
         }
-
         tile.setBitmask(bitmask);
     }
 }
