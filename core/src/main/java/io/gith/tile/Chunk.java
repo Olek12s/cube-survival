@@ -26,6 +26,10 @@ public class Chunk {
     public Tile[][] getTiles() {
         return tiles;
     }
+    public Tile getTile(int localX, int localY) {return tiles[localX][localY];}
+    public void setTile(int localX, int localY, Tile tile) {
+        tiles[localX][localY] = tile;
+    }
     public Vector2 getWorldPosition() {return new Vector2(getWorldX(), getWorldY());}
     public int getIndexX() {
         return (int) indexPosition.x * CHUNK_SIZE;

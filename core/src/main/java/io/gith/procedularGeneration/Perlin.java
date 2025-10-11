@@ -2,9 +2,21 @@ package io.gith.procedularGeneration;
 
 import java.util.Random;
 
-public final class Noise
+public final class Perlin
 {
-    public static double perlinNoise(double pixelX, double pixelY, int octaves, double persistence, double lacunarity, int seed)
+    private int seed;
+    private int octaves;
+    private double persistence;
+    private double lacunarity;
+
+    public Perlin(int seed, int octaves, double persistence, double lacunarity) {
+        this.seed = seed;
+        this.octaves = octaves;
+        this.persistence = persistence;
+        this.lacunarity = lacunarity;
+    }
+
+    public double perlinNoise(double pixelX, double pixelY)
     {
         int[] p = buildPermutation(seed);
 
