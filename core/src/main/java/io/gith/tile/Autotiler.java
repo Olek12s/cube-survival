@@ -80,7 +80,26 @@ public class Autotiler
         maskToVariant.put((byte)0b0000_0111, new Pair<>(2, 0)); // 7    N NE E
         maskToVariant.put((byte)0b0001_0100, new Pair<>(2, 2)); // 20   E S
 
-
+        maskToVariant.put((byte)0b0111_1111, new Pair<>(4, 3));
+        maskToVariant.put((byte)0b1111_0111, new Pair<>(5, 3));
+        maskToVariant.put((byte)0b1011_1111, new Pair<>(5, 2));
+        maskToVariant.put((byte)0b0101_0001, new Pair<>(0, 3));
+        maskToVariant.put((byte)0b0001_0101, new Pair<>(2, 3));
+        maskToVariant.put((byte)0b0001_0010, new Pair<>(2, 3));
+        maskToVariant.put((byte)0b0000_1001, new Pair<>(2, 4));
+        maskToVariant.put((byte)0b0010_0001, new Pair<>(3, 4));
+        maskToVariant.put((byte)0b0100_0101, new Pair<>(3, 0));
+        maskToVariant.put((byte)0b1000_0100, new Pair<>(1, 5));
+        maskToVariant.put((byte)0b0100_1000, new Pair<>(0, 4));
+        maskToVariant.put((byte)0b1001_0100, new Pair<>(6, 6));
+        maskToVariant.put((byte)0b0100_1001, new Pair<>(4, 4));
+        maskToVariant.put((byte)0b0101_0100, new Pair<>(3, 2));
+        maskToVariant.put((byte)0b0010_0100, new Pair<>(1, 4));
+        maskToVariant.put((byte)0b1001_0000, new Pair<>(3, 5));
+        maskToVariant.put((byte)0b0101_0101, new Pair<>(3, 3));
+        maskToVariant.put((byte)0b0100_0010, new Pair<>(0, 5));
+        maskToVariant.put((byte)0b0010_0101, new Pair<>(6, 4));
+        maskToVariant.put((byte)0b0101_0010, new Pair<>(4, 6));
     }
 
 
@@ -90,7 +109,16 @@ public class Autotiler
         if (variant == null) {
             String bin = String.format("%8s", Integer.toBinaryString(mask & 0xFF))
                 .replace(' ', '0');
-            System.out.println("variation does not exist for: " + bin + " (" + mask + ")");
+            System.out.println("no variant for: " + bin + " (" + mask + ")");
+            System.out.println("   bits: N=" + ((mask & 1) != 0) +
+                ", NE=" + ((mask & 2) != 0) +
+                ", E=" + ((mask & 4) != 0) +
+                ", SE=" + ((mask & 8) != 0) +
+                ", S=" + ((mask & 16) != 0) +
+                ", SW=" + ((mask & 32) != 0) +
+                ", W=" + ((mask & 64) != 0) +
+                ", NW=" + ((mask & 128) != 0));
+
             return 0;
         }
         return variant.first() + variant.second() * ATLAS_WIDTH;

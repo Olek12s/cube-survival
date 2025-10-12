@@ -1,6 +1,6 @@
-package io.gith.procedularGeneration.biome;
+package io.gith.procedularGeneration;
 
-public enum Biome
+public enum BiomeName
 {
     Plains,
     Ocean,

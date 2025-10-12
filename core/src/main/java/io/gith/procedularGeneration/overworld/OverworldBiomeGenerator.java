@@ -1,7 +1,7 @@
-package io.gith.procedularGeneration.biome.overworld;
+package io.gith.procedularGeneration.overworld;
 
 import io.gith.procedularGeneration.Perlin;
-import io.gith.procedularGeneration.biome.Biome;
+import io.gith.procedularGeneration.BiomeName;
 
 public class OverworldBiomeGenerator
 {
@@ -18,7 +18,7 @@ public class OverworldBiomeGenerator
         this.heightNoise = new Perlin(seed+3, 2, 0.5f, 2.0f);
     }
 
-    public Biome generateBiome(double worldX, double worldY) {
+    public BiomeName generateBiome(double worldX, double worldY) {
         double x = worldX * scale;
         double y = worldY * scale;
 
@@ -28,23 +28,23 @@ public class OverworldBiomeGenerator
         double height = heightNoise.perlinNoise(x, y);
 
         //  Ocean / Coast
-        if (continent < 0.45) return Biome.Ocean;
-        if (continent < 0.47) return Biome.Coast;
+        if (continent < 0.45) return BiomeName.Ocean;
+        if (continent < 0.47) return BiomeName.Coast;
 
         //  Mountains / Highlands
-        if (height > 0.75) return Biome.Mountains;
-        if (height > 0.65) return Biome.Highlands;
+        if (height > 0.75) return BiomeName.Mountains;
+        if (height > 0.65) return BiomeName.Highlands;
 
         //  Desert
-        if (height <= 0.65 && temperature > 0.5 && humidity < 0.45) return Biome.Desert;
+        if (height <= 0.65 && temperature > 0.5 && humidity < 0.45) return BiomeName.Desert;
 
         //  Taiga
-        if (temperature < 0.4 && humidity > 0.45) return Biome.Taiga;
+        if (temperature < 0.4 && humidity > 0.45) return BiomeName.Taiga;
 
         //  Forest
-        if (temperature > 0.45 && humidity > 0.5) return Biome.Forest;
+        if (temperature > 0.45 && humidity > 0.5) return BiomeName.Forest;
 
         //  Plains
-        return Biome.Plains;
+        return BiomeName.Plains;
     }
 }

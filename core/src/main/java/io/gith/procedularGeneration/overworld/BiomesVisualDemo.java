@@ -1,6 +1,6 @@
-package io.gith.procedularGeneration.biome;
+package io.gith.procedularGeneration.overworld;
 
-import io.gith.procedularGeneration.biome.overworld.OverworldBiomeGenerator;
+import io.gith.procedularGeneration.BiomeName;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,17 +22,17 @@ public class BiomesVisualDemo {
         private static final int CHUNK_SIZE = 8;
         private static final double MOVE_STEP = CHUNK_SIZE * 64;
 
-        private static final Map<Biome, Color> BIOME_COLORS = new EnumMap<>(Biome.class);
+        private static final Map<BiomeName, Color> BIOME_COLORS = new EnumMap<>(BiomeName.class);
 
         static {
-            BIOME_COLORS.put(Biome.Ocean, Color.BLUE);
-            BIOME_COLORS.put(Biome.Coast, Color.ORANGE);
-            BIOME_COLORS.put(Biome.Plains, new Color(0x00FF5E));
-            BIOME_COLORS.put(Biome.Desert, Color.YELLOW);
-            BIOME_COLORS.put(Biome.Forest, new Color(0x12A247));
-            BIOME_COLORS.put(Biome.Taiga, new Color(0x799583));
-            BIOME_COLORS.put(Biome.Highlands, Color.LIGHT_GRAY);
-            BIOME_COLORS.put(Biome.Mountains, Color.BLACK);
+            BIOME_COLORS.put(BiomeName.Ocean, Color.BLUE);
+            BIOME_COLORS.put(BiomeName.Coast, Color.ORANGE);
+            BIOME_COLORS.put(BiomeName.Plains, new Color(0x00FF5E));
+            BIOME_COLORS.put(BiomeName.Desert, Color.YELLOW);
+            BIOME_COLORS.put(BiomeName.Forest, new Color(0x12A247));
+            BIOME_COLORS.put(BiomeName.Taiga, new Color(0x799583));
+            BIOME_COLORS.put(BiomeName.Highlands, Color.LIGHT_GRAY);
+            BIOME_COLORS.put(BiomeName.Mountains, Color.BLACK);
         }
 
         public BiomePanel(int width, int height, int seed) {
@@ -73,8 +73,8 @@ public class BiomesVisualDemo {
                 for (int x = 0; x < width; x++) {
                     double worldX = x + worldOffsetX;
                     double worldY = y + worldOffsetY;
-                    Biome biome = generator.generateBiome(worldX, worldY);
-                    Color color = BIOME_COLORS.getOrDefault(biome, Color.MAGENTA);
+                    BiomeName biomeName = generator.generateBiome(worldX, worldY);
+                    Color color = BIOME_COLORS.getOrDefault(biomeName, Color.MAGENTA);
                     image.setRGB(x, y, color.getRGB());
                 }
             }
@@ -93,7 +93,7 @@ public class BiomesVisualDemo {
             g.drawString("Legenda biomów:", legendX, legendY);
             legendY += 20;
 
-            for (Map.Entry<Biome, Color> entry : BIOME_COLORS.entrySet()) {
+            for (Map.Entry<BiomeName, Color> entry : BIOME_COLORS.entrySet()) {
                 g.setColor(entry.getValue());
                 g.fillOval(legendX, legendY, 12, 12);
                 g.setColor(Color.BLACK);

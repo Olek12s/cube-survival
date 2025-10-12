@@ -2,6 +2,8 @@ package io.gith.tile;
 
 import com.badlogic.gdx.math.Vector2;
 import io.gith.*;
+import io.gith.procedularGeneration.WorldGenerator;
+import io.gith.procedularGeneration.overworld.Overworld;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,83 +14,16 @@ public class TileMapController implements Renderable
     private final Map<Vector2, Chunk> chunks;
 
     public void loadFirstChunks() {
-        Chunk chunk1 = new Chunk(new Vector2(0,0));
-        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
-            for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
-                Tile tile = new Tile.Builder()
-                    .id(TileID.GRASS2)
-                    .position(new Vector2(
-                        chunk1.getIndexPosition().x + i,
-                        chunk1.getIndexPosition().y + j))
-                    .build();
-                chunk1.setTileLocalCoords(tile, i, j);
 
-                if (j == 5)
-                {
-                    tile = new Tile.Builder()
-                        .id(TileID.DIRT2)
-                        .position(new Vector2(
-                            chunk1.getIndexPosition().x + i,
-                            chunk1.getIndexPosition().y + j))
-                        .build();
-                    chunk1.setTileLocalCoords(tile, i, j);
-                }
+        WorldGenerator overworldGenerator = new Overworld(12);
 
-            }
-        }
-        putChunkOnMap(chunk1);
-        Chunk chunk2 = new Chunk(new Vector2(1,0));
-        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
-            for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
-                Tile tile = new Tile.Builder()
-                    .id(TileID.DIRT2)
-                    .position(new Vector2(
-                        chunk2.getIndexPosition().x + i,
-                        chunk2.getIndexPosition().y + j))
-                    .build();
-                chunk2.setTileLocalCoords(tile, i, j);
-            }
-        }
-        putChunkOnMap(chunk2);
-
-        Chunk chunk3 = new Chunk(new Vector2(0,-1));
-        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
-            for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
-                Tile tile = new Tile.Builder()
-                    .id(TileID.DIRT2)
-                    .position(new Vector2(
-                        chunk3.getIndexPosition().x + i,
-                        chunk3.getIndexPosition().y + j))
-                    .build();
-                chunk3.setTileLocalCoords(tile, i, j);
-            }
-        }
-        putChunkOnMap(chunk3);
-
-
-        Chunk chunk4 = new Chunk(new Vector2(1,-1));
-        for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
-            for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
-                Tile tile = new Tile.Builder()
-                    .id(TileID.GRASS2)
-                    .position(new Vector2(
-                        chunk4.getIndexPosition().x + i,
-                        chunk4.getIndexPosition().y + j))
-                    .build();
-                chunk4.setTileLocalCoords(tile, i, j);
-            }
-        }
-        putChunkOnMap(chunk4);
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                chunk4.getTileLocalCoords(i, 7-j).setId(TileID.GRASS2);
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 100; j++) {
+                putChunkOnMap(overworldGenerator.generateChunk(new Vector2(i,j)));
             }
         }
 
-        for (int i = 0; i < 3; i++) chunk4.getTileLocalCoords( 3, 7-i).setId(TileID.GRASS2);
-        for (int i = 0; i < 3; i++) chunk4.getTileLocalCoords( i, 4).setId(TileID.GRASS2);
-        chunk4.getTileLocalCoords(3,4).setId(TileID.GRASS2);
+       // putChunkOnMap(overworldGenerator.generateChunk(new Vector2(0,0)));
 
 
 
@@ -119,7 +54,7 @@ public class TileMapController implements Renderable
 
     public void putChunkOnMap(Chunk chunk) {
         Vector2 key = chunk.getChunkCoords();
-        chunks.put(key, chunk);
+        chunks.putIfAbsent(key, chunk);
     }
 
 

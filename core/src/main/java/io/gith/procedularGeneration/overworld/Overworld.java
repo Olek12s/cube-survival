@@ -1,8 +1,9 @@
-package io.gith.procedularGeneration.biome.overworld;
+package io.gith.procedularGeneration.overworld;
 
 import com.badlogic.gdx.math.Vector2;
+import io.gith.procedularGeneration.Biome;
 import io.gith.procedularGeneration.WorldGenerator;
-import io.gith.procedularGeneration.biome.Biome;
+import io.gith.procedularGeneration.BiomeName;
 import io.gith.tile.Chunk;
 import io.gith.tile.Tile;
 
@@ -31,10 +32,10 @@ public class Overworld implements WorldGenerator
                 int worldX = (int)(worldStartX + localX);
                 int worldY = (int)(worldStartY + localY);
 
-                Biome biome = biomeGenerator.generateBiome(worldX, worldY);
-                OverworldBiome biomeLogic = biomeRegistry.get(biome);
+                BiomeName biomeName = biomeGenerator.generateBiome(worldX, worldY);
+                Biome biome = biomeRegistry.get(biomeName);
 
-                Tile tile = biomeLogic.generateTile(worldX, worldY, seed);
+                Tile tile = biome.generateTile(worldX, worldY, seed);
                 chunk.setTile(localX, localY, tile);
             }
         }

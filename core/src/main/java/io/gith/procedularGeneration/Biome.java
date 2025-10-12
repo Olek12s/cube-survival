@@ -1,8 +1,8 @@
-package io.gith.procedularGeneration.biome.overworld;
+package io.gith.procedularGeneration;
 
 import io.gith.tile.Tile;
 
-public interface OverworldBiome
+public interface Biome
 {
     Tile generateTile(int worldX, int worldY, int seed);
 }
