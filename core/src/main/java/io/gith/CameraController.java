@@ -18,7 +18,7 @@ public class CameraController implements Updatable
     private static final int BASE_TILES_X = 16;
     private static final int BASE_TILES_Y = 9;
 
-    private static float CAMERA_SPEED = 8000f;
+    private static float CAMERA_SPEED = 3000f;
 
     private float zoom = 1f;
     private static final float ZOOM_SPEED = 0.1f;

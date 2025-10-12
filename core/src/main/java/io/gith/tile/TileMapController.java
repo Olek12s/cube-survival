@@ -23,7 +23,7 @@ public class TileMapController implements Renderable
 
         // TODO: TEMPORARY BLOCK
 
-        WorldGenerator overworldGenerator = new Overworld(12);
+        WorldGenerator overworldGenerator = new Overworld((int)System.currentTimeMillis());
 
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService executor = Executors.newFixedThreadPool(cores);

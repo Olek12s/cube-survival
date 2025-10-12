@@ -10,7 +10,7 @@ public class ForestBiome implements Biome
     @Override
     public Tile generateTile(int worldPositionX, int worldPositionY, int seed) {
         return new Tile.Builder()
-            .id(TileID.GRASS)
+            .id(TileID.DIRT)
             .position(new Vector2(
                 worldPositionX,
                 worldPositionY))
