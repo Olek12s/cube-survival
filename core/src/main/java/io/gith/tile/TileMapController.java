@@ -5,30 +5,60 @@ import io.gith.*;
 import io.gith.procedularGeneration.WorldGenerator;
 import io.gith.procedularGeneration.overworld.Overworld;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RenderingOrder(Order.TILE)
 public class TileMapController implements Renderable
 {
-    private final Map<Vector2, Chunk> chunks;
+    private final Map<Vector2, Chunk> loadedChunks;
 
     public void loadFirstChunks() {
 
+        // TODO: TEMPORARY BLOCK
+
         WorldGenerator overworldGenerator = new Overworld(12);
 
+        int cores = Runtime.getRuntime().availableProcessors();
+        ExecutorService executor = Executors.newFixedThreadPool(cores);
+        ConcurrentHashMap<Vector2, Chunk> generatedChunks = new ConcurrentHashMap<>();
+        List<Callable<Void>> tasks = new ArrayList<>();
+
         for (int i = 0; i < 100; i++) {
+            final int chunkX = i;
             for (int j = 0; j < 100; j++) {
-                putChunkOnMap(overworldGenerator.generateChunk(new Vector2(i,j)));
+                final int chunkY = j;
+                tasks.add(() -> {
+                    Chunk c = overworldGenerator.generateChunk(new Vector2(chunkX, chunkY));
+                    generatedChunks.put(new Vector2(chunkX, chunkY), c);
+                    return null;
+                });
             }
         }
 
-       // putChunkOnMap(overworldGenerator.generateChunk(new Vector2(0,0)));
+        try {
+            executor.invokeAll(tasks);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        } finally {
+            executor.shutdown();
+        }
 
+        for (Map.Entry<Vector2, Chunk> entry : generatedChunks.entrySet()) {
+            putChunkOnMap(entry.getValue());
+        }
 
+        // TODO: TEMPORARY BLOCK
 
-        // after loading all chunks - assign bitmask
-        for (Chunk chunk : chunks.values()) {
+        // after loading all loadedChunks - assign bitmask
+        for (Chunk chunk : loadedChunks.values()) {
             for (int x = 0; x < Chunk.CHUNK_SIZE; x++) {
                 for (int y = 0; y < Chunk.CHUNK_SIZE; y++) {
                     chunk.getTileLocalCoords(x, y).updateBitmask();
@@ -39,22 +69,22 @@ public class TileMapController implements Renderable
 
 
     public Map<Vector2, Chunk> getLoadedChunks() {
-        return chunks;
+        return loadedChunks;
     }
 
     public TileMapController() {
         Main.getInstance().getRenderables().add(this);
-        this.chunks = new HashMap<>();
+        this.loadedChunks = new HashMap<>();
     }
 
     public Chunk getChunkFromMap(int chunkX, int chunkY) {
         Vector2 key = new Vector2(chunkX, chunkY);
-        return chunks.get(key);
+        return loadedChunks.get(key);
     }
 
     public void putChunkOnMap(Chunk chunk) {
         Vector2 key = chunk.getChunkCoords();
-        chunks.putIfAbsent(key, chunk);
+        loadedChunks.putIfAbsent(key, chunk);
     }
 
 
@@ -128,8 +158,19 @@ public class TileMapController implements Renderable
 
     @Override
     public void render() {
-        for (Chunk c : chunks.values()) {
-            c.render();
+        CameraController cam = Main.getInstance().getCameraController();
+        float chunkSizeInPix = Chunk.CHUNK_SIZE * CameraController.TILE_SIZE;
+
+
+        for (Chunk c : loadedChunks.values()) {
+            Vector2 pos = c.getChunkCoords();
+            float baseX = pos.x * chunkSizeInPix;
+            float baseY = pos.y * chunkSizeInPix;
+
+            boolean visible = cam.isRectVisible(baseX, baseY, chunkSizeInPix, chunkSizeInPix);
+            if (visible) {
+                c.render();
+            }
         }
     }
 }

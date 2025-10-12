@@ -10,7 +10,7 @@ public class CoastBiome implements Biome {
     @Override
     public Tile generateTile(int worldPositionX, int worldPositionY, int seed) {
         return new Tile.Builder()
-            .id(TileID.SNOW)
+            .id(TileID.SAND)
             .position(new Vector2(
                 worldPositionX,
                 worldPositionY))
