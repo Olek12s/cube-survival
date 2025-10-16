@@ -14,7 +14,7 @@ public class CameraController implements Updatable
 {
     private Viewport viewport;
     private OrthographicCamera camera;
-    public static final float TILE_SIZE = 64;
+    public static final float TILE_SIZE = 16;
     private static final int BASE_TILES_X = 16;
     private static final int BASE_TILES_Y = 9;
 
