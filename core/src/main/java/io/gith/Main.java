@@ -3,6 +3,7 @@ package io.gith;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -126,6 +127,7 @@ public class Main extends Game
 
         // ShapeRenderer (dbg) //
         shapeRenderer.setProjectionMatrix(cameraController.getCamera().combined);
+        Gdx.gl.glEnable(GL20.GL_BLEND); // BLENDING colors ON
         shapeRenderer.begin();
         for (Renderable r : renderables) {
             r.renderShape();

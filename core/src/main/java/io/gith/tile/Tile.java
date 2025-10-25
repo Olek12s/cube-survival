@@ -56,7 +56,7 @@ public class Tile  {
         float x = indexPosition.x * TILE_SIZE;
         float y = indexPosition.y * TILE_SIZE;
         ShapeRenderer shapeRenderer = Main.getInstance().getShapeRenderer();
-        shapeRenderer.setColor(0, 1, 0, 1);
+        shapeRenderer.setColor(0, 1, 0, 0.25f);
         shapeRenderer.rect(x, y, TILE_SIZE, TILE_SIZE);
     }
 

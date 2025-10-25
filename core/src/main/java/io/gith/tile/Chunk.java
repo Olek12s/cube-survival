@@ -63,7 +63,7 @@ public class Chunk {
         float width = CHUNK_SIZE * TILE_SIZE;
         float height = CHUNK_SIZE * TILE_SIZE;
 
-        shapeRenderer.setColor(0, 1, 0, 1);
+        shapeRenderer.setColor(0, 1, 1, 1f);
         shapeRenderer.rect(x, y, width, height);
     }
 
