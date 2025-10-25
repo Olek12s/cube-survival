@@ -2,6 +2,7 @@ package io.gith.tile;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.*;
 import lombok.Getter;
@@ -49,6 +50,14 @@ public class Tile  {
 
         TextureRegion subTile = new TextureRegion(region, x, y, tileSizeInAtlas, tileSizeInAtlas);
         batch.draw(subTile, indexPosition.x * TILE_SIZE, indexPosition.y * TILE_SIZE);
+    }
+
+    protected void renderOutline() {
+        float x = indexPosition.x * TILE_SIZE;
+        float y = indexPosition.y * TILE_SIZE;
+        ShapeRenderer shapeRenderer = Main.getInstance().getShapeRenderer();
+        shapeRenderer.setColor(0, 1, 0, 1);
+        shapeRenderer.rect(x, y, TILE_SIZE, TILE_SIZE);
     }
 
 

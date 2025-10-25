@@ -6,7 +6,12 @@ public class EntityRenderer implements Renderable
 {
 
     @Override
-    public void render() {
+    public void renderTexture() {
+
+    }
+
+    @Override
+    public void renderShape() {
 
     }
 }

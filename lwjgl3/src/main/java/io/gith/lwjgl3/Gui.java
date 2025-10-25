@@ -31,7 +31,7 @@ public class Gui implements Renderable
     }
 
     @Override
-    public void render() {
+    public void renderTexture() {
         float windowWidth = Gdx.graphics.getWidth() / 5f;
 
         ImGui.setNextWindowPos(0, 0, ImGuiCond.Always);
@@ -49,6 +49,11 @@ public class Gui implements Renderable
 
 
         ImGui.end();
+    }
+
+    @Override
+    public void renderShape() {
+
     }
 
 

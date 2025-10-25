@@ -1,6 +1,8 @@
 package io.gith.tile;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import io.gith.Main;
 
 import static io.gith.CameraController.TILE_SIZE;
 
@@ -42,12 +44,35 @@ public class Chunk {
     public Vector2 getChunkCoords() {return chunkCoords;}
 
 
-    protected void render()
+    protected void renderTextures()
     {
         for (int x = 0; x < tiles.length; x++) {
             for (int y = 0; y < tiles[0].length; y++) {
                 if (tiles[x][y] == null) continue;  // don't try to render null tile
                 tiles[x][y].render();
+            }
+        }
+    }
+
+    protected void renderOutlinesChunk()
+    {
+        ShapeRenderer shapeRenderer = Main.getInstance().getShapeRenderer();
+
+        float x = indexPosition.x * TILE_SIZE;
+        float y = indexPosition.y * TILE_SIZE;
+        float width = CHUNK_SIZE * TILE_SIZE;
+        float height = CHUNK_SIZE * TILE_SIZE;
+
+        shapeRenderer.setColor(0, 1, 0, 1);
+        shapeRenderer.rect(x, y, width, height);
+    }
+
+    protected void renderOutlinesEachTile()
+    {
+        for (int x = 0; x < tiles.length; x++) {
+            for (int y = 0; y < tiles[0].length; y++) {
+                if (tiles[x][y] == null) continue;
+                tiles[x][y].renderOutline();
             }
         }
     }

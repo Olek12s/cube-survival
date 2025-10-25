@@ -155,9 +155,9 @@ public class TileMapController implements Renderable
         return neighbors;
     }
 
-
+    // TODO: MapRenderer class
     @Override
-    public void render() {
+    public void renderTexture() {
         CameraController cam = Main.getInstance().getCameraController();
         float chunkSizeInPix = Chunk.CHUNK_SIZE * CameraController.TILE_SIZE;
 
@@ -169,7 +169,26 @@ public class TileMapController implements Renderable
 
             boolean visible = cam.isRectVisible(baseX, baseY, chunkSizeInPix, chunkSizeInPix);
             if (visible) {
-                c.render();
+                c.renderTextures();
+            }
+        }
+    }
+
+    @Override
+    public void renderShape() {
+        CameraController cam = Main.getInstance().getCameraController();
+        float chunkSizeInPix = Chunk.CHUNK_SIZE * CameraController.TILE_SIZE;
+
+
+        for (Chunk c : loadedChunks.values()) {
+            Vector2 pos = c.getChunkCoords();
+            float baseX = pos.x * chunkSizeInPix;
+            float baseY = pos.y * chunkSizeInPix;
+
+            boolean visible = cam.isRectVisible(baseX, baseY, chunkSizeInPix, chunkSizeInPix);
+            if (visible) {
+                c.renderOutlinesChunk();
+                c.renderOutlinesEachTile();
             }
         }
     }

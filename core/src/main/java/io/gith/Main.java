@@ -4,11 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
-import io.gith.tile.Chunk;
-import io.gith.tile.Tile;
-import io.gith.tile.TileID;
 import io.gith.tile.TileMapController;
 import lombok.Getter;
 
@@ -21,6 +18,7 @@ public class Main extends Game
     private static Main instance;
 
     public SpriteBatch batch;
+    private ShapeRenderer shapeRenderer;
     private ArrayList<Updatable> updatables;
     private ArrayList<Renderable> renderables;
 
@@ -56,6 +54,8 @@ public class Main extends Game
         updatables = new ArrayList<>();
         renderables = new ArrayList<>();
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setAutoShapeType(true);
         assetsController = new Assets();
         inputController = new InputController();
         cameraController = new CameraController();
@@ -116,12 +116,21 @@ public class Main extends Game
         ScreenUtils.clear(Color.BLACK);
         cameraController.getCamera().update();
 
+        // TEXTURES (batch) //
         batch.setProjectionMatrix(cameraController.getCamera().combined);
         batch.begin();
         for (Renderable r : renderables) {
-            r.render();
+            r.renderTexture();
         }
         batch.end();
+
+        // ShapeRenderer (dbg) //
+        shapeRenderer.setProjectionMatrix(cameraController.getCamera().combined);
+        shapeRenderer.begin();
+        for (Renderable r : renderables) {
+            r.renderShape();
+        }
+        shapeRenderer.end();
     }
 
     public void resize (int width, int height) {
