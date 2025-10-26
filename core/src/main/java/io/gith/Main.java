@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import io.gith.entity.Entity;
+import io.gith.entity.Player;
 import io.gith.tile.TileMapController;
 import lombok.Getter;
 
@@ -48,6 +51,10 @@ public class Main extends Game
     private TileMapController tileMap;
     ///////////////////     controllers       ///////////////////
 
+    ///////////////////     rest       ///////////////////
+    private Entity player;
+    ///////////////////     rest       ///////////////////
+
     public void create()
     {
         if (instance == null) instance = this;
@@ -62,6 +69,8 @@ public class Main extends Game
         cameraController = new CameraController();
         tileMap = new TileMapController();
         tileMap.loadFirstChunks();
+
+        this.player = new Player(new Vector2(0, 0));
     }
 
 

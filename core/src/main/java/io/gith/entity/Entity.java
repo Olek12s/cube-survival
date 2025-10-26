@@ -1,5 +1,7 @@
 package io.gith.entity;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.Main;
 import io.gith.Renderable;
@@ -8,31 +10,60 @@ import io.gith.Updatable;
 
 public abstract class Entity implements Spawnable
 {
-    private final Renderable entityRenderer;
-    private final Updatable entityUpdater;
-    private Vector2 worldPosition;
-    private Vector2 velocity;
-    private boolean spawned;
+    protected final Renderable entityRenderer;
+    protected final Updatable entityUpdater;
+    protected boolean spawned;
+    protected Vector2 worldPosition;
+    protected Vector2 velocity;
+    protected float speed = 10;
+    protected EntityID id;
 
-    public Entity(Vector2 startPosition) {
-        entityRenderer = new EntityRenderer();
-        entityUpdater = new EntityUpdater();
-        Main.getInstance().getRenderables().add(entityRenderer);
-        Main.getInstance().getUpdatables().add(entityUpdater);
-
-        this.worldPosition = new Vector2(startPosition);
+    public Entity(EntityID id, Vector2 worldPosition) {
+        entityRenderer = new EntityRenderer(this);
+        entityUpdater = new EntityUpdater(this);
+        this.id = id;
+        this.worldPosition = new Vector2(worldPosition);
         this.velocity = new Vector2(0, 0);
+
+
+        spawn();
     }
 
+    @Override
     public void spawn() {
-        if (spawned) return;
-        Main.getInstance().getRenderables().add(entityRenderer);
-        Main.getInstance().getUpdatables().add(entityUpdater);
+
+        Spawnable.super.spawn();
     }
 
+    @Override
     public void despawn() {
-        if (!spawned) return;
-        Main.getInstance().getRenderables().remove(entityRenderer);
-        Main.getInstance().getUpdatables().remove(entityUpdater);
+        Spawnable.super.despawn();
     }
+
+    @Override
+    public void update(float dt) {
+        entityUpdater.update(dt);
+    }
+
+    @Override
+    public void renderTexture() {
+        entityRenderer.renderTexture();
+    }
+
+    @Override
+    public void renderShape() {
+        entityRenderer.renderShape();
+    }
+
+    @Override
+    public Renderable getRenderer() {return entityRenderer;}
+
+    @Override
+    public Updatable getUpdater() {return entityUpdater;}
+
+    @Override
+    public boolean isSpawned() {return spawned;}
+
+    @Override
+    public void setSpawned(boolean value) {spawned = value;}
 }
