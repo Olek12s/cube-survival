@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import io.gith.Main;
@@ -60,6 +62,10 @@ public class EntityRenderer implements Renderable
 
     @Override
     public void renderShape() {
+        ShapeRenderer shapeRenderer = Main.getInstance().getShapeRenderer();
 
+        shapeRenderer.setColor(1, 0, 0, 1);
+        Rectangle hb = entity.getHitbox();
+        shapeRenderer.rect(hb.x, hb.y, hb.width, hb.height);
     }
 }

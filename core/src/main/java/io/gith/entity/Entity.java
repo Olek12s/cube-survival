@@ -2,6 +2,7 @@ package io.gith.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.Main;
 import io.gith.Renderable;
@@ -19,7 +20,8 @@ public abstract class Entity implements Spawnable
     protected Vector2 worldPosition;
     protected Direction direction;
     protected Vector2 velocity;
-    protected float speed = 24f;
+    protected Rectangle hitbox;
+    protected float speed = 84f;
     protected boolean isWalking;
     protected EntityID id;
 
@@ -29,6 +31,7 @@ public abstract class Entity implements Spawnable
         entityUpdater = new EntityUpdater(this);
         this.worldPosition = worldPosition;
         this.velocity = new Vector2(0, 0);
+        hitbox = new Rectangle(worldPosition.x, worldPosition.y, 16, 16);
         this.direction = Direction.DOWN;
 
 

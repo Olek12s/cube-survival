@@ -19,9 +19,9 @@ public class Player extends Entity
     @Override
     public void update(float dt) {
         super.update(dt);
-
         handleInput(dt);
-        applyVelocity(dt);
+
+        if (Main.getInstance().getTileMap().getTileAtWorldPosition(worldPosition.x, worldPosition.y) == null) return;
 
         if (Main.getInstance().getTileMap().getTileAtWorldPosition(worldPosition.x, worldPosition.y).isCollidable()) {
            System.out.println("collidable");

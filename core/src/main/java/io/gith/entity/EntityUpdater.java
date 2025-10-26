@@ -16,11 +16,16 @@ public class EntityUpdater implements Updatable
     @Override
     public void update(float dt) {
         applyVelocity(dt);
+        updateHitbox();
     }
 
     private void applyVelocity(float dt) {
         if (entity.velocity.len2() > 0) {
             entity.worldPosition.mulAdd(entity.velocity, dt);
         }
+    }
+
+    private void updateHitbox() {
+        entity.hitbox.setPosition(entity.worldPosition.x, entity.worldPosition.y);
     }
 }
