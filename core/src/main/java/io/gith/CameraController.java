@@ -107,7 +107,7 @@ public class CameraController implements Updatable
         camera.translate(movement);
         camera.update();
         */
-        camera.position.set(targetPosition.x, targetPosition.y, 0);
+        camera.position.set(targetPosition.x+8, targetPosition.y+8, 0);
         camera.update();
     }
 }
