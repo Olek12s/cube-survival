@@ -3,6 +3,7 @@ package io.gith.entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
+import io.gith.Main;
 import io.gith.Renderable;
 import io.gith.Updatable;
 import io.gith.utils.Direction;
@@ -21,6 +22,13 @@ public class Player extends Entity
 
         handleInput(dt);
         applyVelocity(dt);
+
+        if (Main.getInstance().getTileMap().getTileAtWorldPosition(worldPosition.x, worldPosition.y).isCollidable()) {
+           System.out.println("collidable");
+        }
+        else {
+            System.out.println("non collidable");
+        }
     }
 
     private void handleInput(float dt) {

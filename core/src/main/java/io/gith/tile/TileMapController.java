@@ -98,7 +98,6 @@ public class TileMapController implements Renderable
                         (chunkPos.x * Chunk.CHUNK_SIZE + x),
                         (chunkPos.y * Chunk.CHUNK_SIZE + y)
                     ))
-                    .collidable(false)
                     .build();
                 chunk.setTileLocalCoords(tile, x, y);
             }
@@ -106,8 +105,6 @@ public class TileMapController implements Renderable
 
         return chunk;
     }
-
-
 
     public Tile getTileAtIndex(int indexX, int indexY) {
         int chunkX = Math.floorDiv(indexX, Chunk.CHUNK_SIZE);
@@ -125,6 +122,13 @@ public class TileMapController implements Renderable
         }
 
         return chunk.getTileLocalCoords(localX, localY);
+    }
+
+    public Tile getTileAtWorldPosition(float worldX, float worldY) {
+        int tileX = Math.floorDiv((int) worldX, (int) CameraController.TILE_SIZE);
+        int tileY = Math.floorDiv((int) worldY, (int) CameraController.TILE_SIZE);
+
+        return getTileAtIndex(tileX, tileY);
     }
 
 

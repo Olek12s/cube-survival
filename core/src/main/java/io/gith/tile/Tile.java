@@ -15,7 +15,6 @@ public class Tile  {
     private Vector2 indexPosition;
     @Getter @Setter
     private TileID id;
-    private boolean collidable;
     @Setter
     private transient byte bitmask;
 
@@ -23,12 +22,15 @@ public class Tile  {
     public Vector2 getWorldPosition() {return new Vector2(getWorldX(), getWorldY());}
     public int getWorldX() {return (int)(indexPosition.x * TILE_SIZE);}
     public int getWorldY() {return (int)(indexPosition.y * TILE_SIZE);}
+    public boolean isCollidable() {
+        return id.isCollidable();
+    }
 
 
     private Tile(Builder builder) {
         this.indexPosition = builder.position;
         this.id = builder.id;
-        this.collidable = builder.collidable;
+        //this.collidable = builder.collidable;
     }
 
     public void updateBitmask() {
@@ -65,7 +67,7 @@ public class Tile  {
     public static class Builder {
         private Vector2 position = new Vector2(0, 0);
         private TileID id;
-        private boolean collidable = false;
+        //private boolean collidable = false;
 
         public Builder position(Vector2 pos) {
             this.position = pos;
@@ -76,12 +78,12 @@ public class Tile  {
             this.id = id;
             return this;
         }
-
+        /*
         public Builder collidable(boolean collidable) {
             this.collidable = collidable;
             return this;
         }
-
+        */
         public Tile build() {
             return new Tile(this);
         }
