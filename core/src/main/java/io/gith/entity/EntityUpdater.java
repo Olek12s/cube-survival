@@ -15,6 +15,12 @@ public class EntityUpdater implements Updatable
 
     @Override
     public void update(float dt) {
-        System.out.println("entity");
+        applyVelocity(dt);
+    }
+
+    private void applyVelocity(float dt) {
+        if (entity.velocity.len2() > 0) {
+            entity.worldPosition.mulAdd(entity.velocity, dt);
+        }
     }
 }

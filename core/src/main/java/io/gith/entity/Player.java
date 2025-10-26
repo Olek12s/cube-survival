@@ -17,17 +17,32 @@ public class Player extends Entity
     @Override
     public void update(float dt) {
         super.update(dt);
-        System.out.println("player");
+
         handleInput(dt);
+        applyVelocity(dt);
     }
 
     private void handleInput(float dt) {
-        velocity.setZero();
+        Vector2 inputDir = new Vector2();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) velocity.y += 1;
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) velocity.y -= 1;
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) velocity.x -= 1;
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) velocity.x += 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) inputDir.y += 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) inputDir.y -= 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) inputDir.x -= 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) inputDir.x += 1;
         if (velocity.len2() > 0) velocity.nor().scl(speed);
+
+        if (inputDir.len2() > 0) {
+            inputDir.nor(); // direction
+            velocity.set(inputDir.scl(speed)); // velocity = speed * direction
+        } else {
+            velocity.setZero();
+        }
+    }
+
+    /*
+    Move entity by velocity vector
+     */
+    private void applyVelocity(float dt) {
+        worldPosition.mulAdd(velocity, dt);
     }
 }

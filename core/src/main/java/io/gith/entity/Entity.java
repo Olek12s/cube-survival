@@ -15,7 +15,7 @@ public abstract class Entity implements Spawnable
     protected boolean spawned;
     protected Vector2 worldPosition;
     protected Vector2 velocity;
-    protected float speed = 10;
+    protected float speed = 24f;
     protected EntityID id;
 
     public Entity(EntityID id, Vector2 worldPosition) {
