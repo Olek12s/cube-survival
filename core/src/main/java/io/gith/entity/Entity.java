@@ -7,7 +7,9 @@ import io.gith.Main;
 import io.gith.Renderable;
 import io.gith.Spawnable;
 import io.gith.Updatable;
+import lombok.Getter;
 
+@Getter
 public abstract class Entity implements Spawnable
 {
     protected final Renderable entityRenderer;
@@ -22,7 +24,7 @@ public abstract class Entity implements Spawnable
         entityRenderer = new EntityRenderer(this);
         entityUpdater = new EntityUpdater(this);
         this.id = id;
-        this.worldPosition = new Vector2(worldPosition);
+        this.worldPosition = worldPosition;
         this.velocity = new Vector2(0, 0);
 
 

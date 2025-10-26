@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -12,6 +13,7 @@ import lombok.Getter;
 @Getter
 public class CameraController implements Updatable
 {
+    private Vector2 targetPosition;
     private Viewport viewport;
     private OrthographicCamera camera;
     public static final float TILE_SIZE = 24;
@@ -25,12 +27,13 @@ public class CameraController implements Updatable
     private static final float MIN_ZOOM = 0.3f;
     private static final float MAX_ZOOM = 150f;
 
-    public CameraController() {
+    public CameraController(Vector2 positionToFollow) {
+        this.targetPosition = positionToFollow;
         Main.getInstance().getUpdatables().add(this);
         camera = new OrthographicCamera();
         viewport = new FitViewport(BASE_TILES_X * TILE_SIZE, BASE_TILES_Y * TILE_SIZE, camera);
 
-        camera.position.set(0, 0, 0);
+        camera.position.set(targetPosition.x, targetPosition.y, 0);
         camera.update();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -42,6 +45,10 @@ public class CameraController implements Updatable
                 return true;
             }
         });
+    }
+
+    public CameraController() {
+        this(new Vector2(0, 0));
     }
 
     public void resize(int width, int height) {
@@ -82,6 +89,7 @@ public class CameraController implements Updatable
 
     @Override
     public void update(float dt) {
+        /*
         Vector2 movement = new Vector2();
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
@@ -97,6 +105,9 @@ public class CameraController implements Updatable
             movement.x += CAMERA_SPEED * dt;
         }
         camera.translate(movement);
+        camera.update();
+        */
+        camera.position.set(targetPosition.x, targetPosition.y, 0);
         camera.update();
     }
 }

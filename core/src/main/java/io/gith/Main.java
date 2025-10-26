@@ -66,11 +66,11 @@ public class Main extends Game
         shapeRenderer.setAutoShapeType(true);
         assetsController = new Assets();
         inputController = new InputController();
-        cameraController = new CameraController();
         tileMap = new TileMapController();
         tileMap.loadFirstChunks();
 
         this.player = new Player(new Vector2(0, 0));
+        cameraController = new CameraController(player.getWorldPosition());
     }
 
 
