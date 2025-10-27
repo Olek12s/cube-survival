@@ -26,6 +26,6 @@ public class EntityUpdater implements Updatable
     }
 
     private void updateHitbox() {
-        entity.hitbox.setPosition(entity.worldPosition.x, entity.worldPosition.y);
+        entity.getHitbox().setPosition(entity.getWorldPosition().x, entity.getWorldPosition().y);
     }
 }

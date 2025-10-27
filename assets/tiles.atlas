@@ -1,0 +1,123 @@
+
+tiles.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+AutotilingTest47
+  rotate: false
+  xy: 2, 452
+  size: 448, 448
+  orig: 448, 448
+  offset: 0, 0
+  index: -1
+DirtA
+  rotate: false
+  xy: 2, 2
+  size: 448, 448
+  orig: 448, 448
+  offset: 0, 0
+  index: -1
+GrassA
+  rotate: false
+  xy: 452, 452
+  size: 448, 448
+  orig: 448, 448
+  offset: 0, 0
+  index: -1
+GravelA
+  rotate: false
+  xy: 452, 2
+  size: 448, 448
+  orig: 448, 448
+  offset: 0, 0
+  index: -1
+
+tiles2.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+SandA
+  rotate: false
+  xy: 2, 452
+  size: 448, 448
+  orig: 448, 448
+  offset: 0, 0
+  index: -1
+SnowA
+  rotate: false
+  xy: 2, 2
+  size: 448, 448
+  orig: 448, 448
+  offset: 0, 0
+  index: -1
+StoneA
+  rotate: false
+  xy: 452, 452
+  size: 448, 448
+  orig: 448, 448
+  offset: 0, 0
+  index: -1
+WaterA
+  rotate: false
+  xy: 452, 2
+  size: 448, 448
+  orig: 448, 448
+  offset: 0, 0
+  index: -1
+
+tiles3.png
+size: 512, 512
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Dirt
+  rotate: false
+  xy: 2, 342
+  size: 168, 168
+  orig: 168, 168
+  offset: 0, 0
+  index: -1
+Grass
+  rotate: false
+  xy: 2, 172
+  size: 168, 168
+  orig: 168, 168
+  offset: 0, 0
+  index: -1
+Gravel
+  rotate: false
+  xy: 2, 2
+  size: 168, 168
+  orig: 168, 168
+  offset: 0, 0
+  index: -1
+Sand
+  rotate: false
+  xy: 172, 342
+  size: 168, 168
+  orig: 168, 168
+  offset: 0, 0
+  index: -1
+Snow
+  rotate: false
+  xy: 342, 342
+  size: 168, 168
+  orig: 168, 168
+  offset: 0, 0
+  index: -1
+Stone
+  rotate: false
+  xy: 172, 172
+  size: 168, 168
+  orig: 168, 168
+  offset: 0, 0
+  index: -1
+Water
+  rotate: false
+  xy: 172, 2
+  size: 168, 168
+  orig: 168, 168
+  offset: 0, 0
+  index: -1

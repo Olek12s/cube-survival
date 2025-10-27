@@ -65,7 +65,6 @@ public class EntityRenderer implements Renderable
         ShapeRenderer shapeRenderer = Main.getInstance().getShapeRenderer();
 
         shapeRenderer.setColor(1, 0, 0, 1);
-        Rectangle hb = entity.getHitbox();
-        shapeRenderer.rect(hb.x, hb.y, hb.width, hb.height);
+        shapeRenderer.polygon(entity.getHitbox().getTransformedVertices());
     }
 }
