@@ -22,7 +22,7 @@ public abstract class Entity implements Spawnable
     protected Direction direction;
     protected Vector2 velocity;
     protected Polygon hitbox;
-    protected float speed = 84f;
+    protected float speed = 90f;
     protected boolean isWalking;
     protected EntityID id;
 
