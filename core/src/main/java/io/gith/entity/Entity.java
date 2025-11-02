@@ -8,10 +8,12 @@ import io.gith.entity.behavior.Behavior;
 import io.gith.utils.Direction;
 import io.gith.utils.Hitbox;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
 @Getter
+@Setter
 public abstract class Entity implements Spawnable
 {
     protected final ArrayList<Behavior> behaviors;

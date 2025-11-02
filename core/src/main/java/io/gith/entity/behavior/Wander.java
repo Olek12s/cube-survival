@@ -3,6 +3,7 @@ package io.gith.entity.behavior;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.entity.Entity;
+import io.gith.utils.Direction;
 
 public class Wander implements Behavior
 {
@@ -41,20 +42,32 @@ public class Wander implements Behavior
                 idleTimer = MathUtils.random(IDLE_TIME_MIN, IDLE_TIME_MAX);
             } else {
                 entity.getVelocity().set(direction).scl(entity.getSpeed());
+                updateDirectionFromVector(direction);
             }
         } else {
             idleTimer -= dt;
             if (idleTimer <= 0) {
                 startMoving();
+                entity.setWalking(true);
             } else {
                 entity.getVelocity().setZero();
+                entity.setWalking(false);
             }
+        }
+    }
+
+    private void updateDirectionFromVector(Vector2 dir) {
+        if (Math.abs(dir.x) > Math.abs(dir.y)) {
+            entity.setDirection(dir.x > 0 ? Direction.RIGHT : Direction.LEFT);
+        } else {
+            entity.setDirection(dir.y > 0 ? Direction.UP : Direction.DOWN);
         }
     }
 
     @Override
     public void end() {
         entity.getVelocity().setZero();
+        entity.setWalking(false);
     }
 
     private void startMoving() {
@@ -62,10 +75,12 @@ public class Wander implements Behavior
         direction.set(MathUtils.cosDeg(angle), MathUtils.sinDeg(angle));
         moveTimer = MathUtils.random(MOVE_TIME_MIN, MOVE_TIME_MAX);
         moving = true;
+        entity.setWalking(true);
     }
 
     private void stopMoving() {
         moving = false;
+        entity.setWalking(false);
         entity.getVelocity().setZero();
     }
 }
