@@ -23,7 +23,7 @@ public abstract class Entity implements Spawnable
     protected Direction direction;
     protected Vector2 velocity;
     protected Hitbox hitbox;
-    protected float speed = 40f;
+    protected float speed = 400f;
     protected boolean isWalking;
     protected EntityID id;
 
@@ -38,14 +38,10 @@ public abstract class Entity implements Spawnable
             16,0,
             16,16,
             0,16,
-            16,24,
-            24,16
         };
 
         hitbox = new Hitbox(vertices);
         this.direction = Direction.DOWN;
-        //hitbox.rotate(32);
-
         spawn();
     }
 
