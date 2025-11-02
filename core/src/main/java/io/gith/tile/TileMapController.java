@@ -35,7 +35,7 @@ public class TileMapController implements Renderable
             for (int j = 0; j < 100; j++) {
                 final int chunkY = j;
                 tasks.add(() -> {
-                    Chunk c = overworldGenerator.generateChunk(new Vector2(chunkX, chunkY));
+                    Chunk c = overworldGenerator.generateChunk(chunkX, chunkY);
                     generatedChunks.put(new Vector2(chunkX, chunkY), c);
                     return null;
                 });

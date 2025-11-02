@@ -21,7 +21,8 @@ public class Overworld implements WorldGenerator
     }
 
     @Override
-    public Chunk generateChunk(Vector2 chunkCoords) {
+    public Chunk generateChunk(int chunkX, int chunkY) {
+        Vector2 chunkCoords = new Vector2(chunkX, chunkY);
         Chunk chunk = new Chunk(chunkCoords);
 
         double worldStartX = chunkCoords.x * Chunk.CHUNK_SIZE;
