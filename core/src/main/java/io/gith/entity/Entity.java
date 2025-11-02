@@ -10,6 +10,7 @@ import io.gith.Renderable;
 import io.gith.Spawnable;
 import io.gith.Updatable;
 import io.gith.utils.Direction;
+import io.gith.utils.Hitbox;
 import lombok.Getter;
 
 @Getter
@@ -21,8 +22,8 @@ public abstract class Entity implements Spawnable
     protected Vector2 worldPosition;
     protected Direction direction;
     protected Vector2 velocity;
-    protected Polygon hitbox;
-    protected float speed = 90f;
+    protected Hitbox hitbox;
+    protected float speed = 40f;
     protected boolean isWalking;
     protected EntityID id;
 
@@ -33,14 +34,17 @@ public abstract class Entity implements Spawnable
         this.worldPosition = worldPosition;
         this.velocity = new Vector2(0, 0);
         float[] vertices = new float[]{
-            0, 0,
-            16, 0,
-            16, 16,
-            0, 16,
+            0,0,
+            16,0,
+            16,16,
+            0,16,
+            16,24,
+            24,16
         };
-        hitbox = new Polygon(vertices);
-        this.direction = Direction.DOWN;
 
+        hitbox = new Hitbox(vertices);
+        this.direction = Direction.DOWN;
+        //hitbox.rotate(32);
 
         spawn();
     }
