@@ -67,7 +67,6 @@ public class Main extends Game
         assetsController = new Assets();
         inputController = new InputController();
         tileMap = new TileMapController();
-        tileMap.loadFirstChunks();
 
         this.player = new Player(new Vector2(0, 0));
         cameraController = new CameraController(player.getWorldPosition());

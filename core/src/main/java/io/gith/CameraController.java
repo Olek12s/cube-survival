@@ -13,7 +13,7 @@ import lombok.Getter;
 @Getter
 public class CameraController implements Updatable
 {
-    private Vector2 targetPosition;
+    private final Vector2 targetPosition;
     private Viewport viewport;
     private OrthographicCamera camera;
     public static final float TILE_SIZE = 24;
@@ -46,6 +46,8 @@ public class CameraController implements Updatable
             }
         });
     }
+
+
 
     public CameraController() {
         this(new Vector2(0, 0));

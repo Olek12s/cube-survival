@@ -5,77 +5,76 @@ import io.gith.*;
 import io.gith.procedularGeneration.WorldGenerator;
 import io.gith.procedularGeneration.overworld.Overworld;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @RenderingOrder(Order.TILE)
-public class TileMapController implements Renderable
+public class TileMapController implements Renderable, Updatable
 {
     private final Map<Vector2, Chunk> loadedChunks;
+    private final int CHUNK_LOAD_RANGE = 8;
+    private final ExecutorService executor;
+    private final WorldGenerator worldGen;
+    private Vector2 lastCameraChunk;
 
-    public void loadFirstChunks() {
+    public TileMapController() {
+        this.loadedChunks = new ConcurrentHashMap<>();
+        this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        this.worldGen = new Overworld((int) System.currentTimeMillis());    // TODO: strategy pattern
+        Main.getInstance().getRenderables().add(this);
+        Main.getInstance().getUpdatables().add(this);
+        lastCameraChunk = new Vector2();
+    }
 
-        // TODO: TEMPORARY BLOCK
+    @Override
+    public void update(float dt) {
+        updateLoadedChunks();
+    }
 
-        WorldGenerator overworldGenerator = new Overworld((int)System.currentTimeMillis());
+    public void updateLoadedChunks() {
+        Vector2 cameraPosition = Main.getInstance().getCameraController().getTargetPosition();
 
-        int cores = Runtime.getRuntime().availableProcessors();
-        ExecutorService executor = Executors.newFixedThreadPool(cores);
-        ConcurrentHashMap<Vector2, Chunk> generatedChunks = new ConcurrentHashMap<>();
-        List<Callable<Void>> tasks = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
-            final int chunkX = i;
-            for (int j = 0; j < 100; j++) {
-                final int chunkY = j;
-                tasks.add(() -> {
-                    Chunk c = overworldGenerator.generateChunk(chunkX, chunkY);
-                    generatedChunks.put(new Vector2(chunkX, chunkY), c);
-                    return null;
+        int playerChunkX = (int) Math.floor(cameraPosition.x / (Chunk.CHUNK_SIZE * CameraController.TILE_SIZE));
+        int playerChunkY = (int) Math.floor(cameraPosition.y / (Chunk.CHUNK_SIZE * CameraController.TILE_SIZE));
+        Vector2 currentChunk = new Vector2(playerChunkX, playerChunkY);
+
+        // if chunk was not changed - no update
+        if (currentChunk.equals(lastCameraChunk) && !loadedChunks.isEmpty()) return;
+        lastCameraChunk.set(currentChunk);
+
+        Set<Vector2> requiredChunks = new HashSet<>();
+
+        // select required chunk positions to load
+        for (int dx = -CHUNK_LOAD_RANGE; dx <= CHUNK_LOAD_RANGE; dx++) {
+            for (int dy = -CHUNK_LOAD_RANGE; dy <= CHUNK_LOAD_RANGE; dy++) {
+                requiredChunks.add(new Vector2(playerChunkX + dx, playerChunkY + dy));
+            }
+        }
+
+        // remove chunks out of range
+      //  loadedChunks.keySet().removeIf(chunkPos -> !requiredChunks.contains(chunkPos));
+
+        // load required chunks
+        for (Vector2 pos : requiredChunks) {
+            if (!loadedChunks.containsKey(pos)) {
+                executor.submit(() -> {
+                    Chunk chunk = worldGen.generateChunk((int) pos.x, (int) pos.y);
+                    synchronized (loadedChunks) {
+                        loadedChunks.put(pos, chunk);
+                    }
                 });
             }
         }
-
-        try {
-            executor.invokeAll(tasks);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
-        } finally {
-            executor.shutdown();
-        }
-
-        for (Map.Entry<Vector2, Chunk> entry : generatedChunks.entrySet()) {
-            putChunkOnMap(entry.getValue());
-        }
-
-        // TODO: TEMPORARY BLOCK
-
-        // after loading all loadedChunks - assign bitmask
-        for (Chunk chunk : loadedChunks.values()) {
-            for (int x = 0; x < Chunk.CHUNK_SIZE; x++) {
-                for (int y = 0; y < Chunk.CHUNK_SIZE; y++) {
-                    chunk.getTileLocalCoords(x, y).updateBitmask();
-                }
-            }
-        }
     }
-
 
     public Map<Vector2, Chunk> getLoadedChunks() {
         return loadedChunks;
     }
 
-    public TileMapController() {
-        Main.getInstance().getRenderables().add(this);
-        this.loadedChunks = new HashMap<>();
-    }
 
     public Chunk getChunkFromMap(int chunkX, int chunkY) {
         Vector2 key = new Vector2(chunkX, chunkY);

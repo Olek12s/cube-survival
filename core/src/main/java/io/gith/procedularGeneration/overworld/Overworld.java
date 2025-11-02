@@ -40,7 +40,12 @@ public class Overworld implements WorldGenerator
                 chunk.setTile(localX, localY, tile);
             }
         }
-
+        System.out.println(
+            "\u001B[36mWorld Generation:\u001B[0m " +
+                "Generated chunk for " +
+                "\u001B[32mOverworld\u001B[0m " +
+            "[" + chunkCoords.x + " " + chunkCoords.y + "]"
+        );
         return chunk;
     }
 }
