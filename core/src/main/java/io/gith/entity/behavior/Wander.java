@@ -42,7 +42,7 @@ public class Wander implements Behavior
                 idleTimer = MathUtils.random(IDLE_TIME_MIN, IDLE_TIME_MAX);
             } else {
                 entity.getVelocity().set(direction).scl(entity.getSpeed());
-                updateDirectionFromVector(direction);
+                entity.setDirection(Direction.fromVector(entity.getVelocity()));
             }
         } else {
             idleTimer -= dt;
@@ -53,14 +53,6 @@ public class Wander implements Behavior
                 entity.getVelocity().setZero();
                 entity.setWalking(false);
             }
-        }
-    }
-
-    private void updateDirectionFromVector(Vector2 dir) {
-        if (Math.abs(dir.x) > Math.abs(dir.y)) {
-            entity.setDirection(dir.x > 0 ? Direction.RIGHT : Direction.LEFT);
-        } else {
-            entity.setDirection(dir.y > 0 ? Direction.UP : Direction.DOWN);
         }
     }
 
