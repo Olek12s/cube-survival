@@ -10,10 +10,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.gith.entity.Entity;
 import io.gith.entity.Player;
+import io.gith.entity.Slime;
 import io.gith.tile.TileMapController;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 @Getter
 public class Main extends Game
@@ -53,6 +55,7 @@ public class Main extends Game
 
     ///////////////////     rest       ///////////////////
     private Entity player;
+    private Entity slime;
     ///////////////////     rest       ///////////////////
 
     public void create()
@@ -69,6 +72,12 @@ public class Main extends Game
         tileMap = new TileMapController();
 
         this.player = new Player(new Vector2(0, 0));
+        this.slime = new Slime(new Vector2(16, 16));
+
+        Random r = new Random();
+        for (int i = 0; i < 100; i++) {
+            new Slime(new Vector2(r.nextInt(100), r.nextInt(100)));
+        }
         cameraController = new CameraController(player.getWorldPosition());
     }
 

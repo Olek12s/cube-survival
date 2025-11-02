@@ -2,7 +2,8 @@ package io.gith.entity;
 
 public enum EntityID
 {
-    PLAYER(0, "Player");
+    PLAYER(0, "Player"),
+    SLIME(1, "Slime");
 
     private final int value;
     private final String name;

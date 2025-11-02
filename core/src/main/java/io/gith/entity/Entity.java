@@ -1,21 +1,20 @@
 package io.gith.entity;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import io.gith.Main;
 import io.gith.Renderable;
 import io.gith.Spawnable;
 import io.gith.Updatable;
+import io.gith.entity.behavior.Behavior;
 import io.gith.utils.Direction;
 import io.gith.utils.Hitbox;
 import lombok.Getter;
 
+import java.util.ArrayList;
+
 @Getter
 public abstract class Entity implements Spawnable
 {
+    protected final ArrayList<Behavior> behaviors;
     protected final Renderable entityRenderer;
     protected final Updatable entityUpdater;
     protected boolean spawned;
@@ -33,6 +32,7 @@ public abstract class Entity implements Spawnable
         entityUpdater = new EntityUpdater(this);
         this.worldPosition = worldPosition;
         this.velocity = new Vector2(0, 0);
+        this.behaviors = new ArrayList<>();
         float[] vertices = new float[]{
             0,0,
             16,0,
@@ -59,6 +59,10 @@ public abstract class Entity implements Spawnable
     @Override
     public void update(float dt) {
         entityUpdater.update(dt);
+
+        for (Behavior b : behaviors) {
+            b.tick(dt);
+        }
     }
 
     @Override
