@@ -3,6 +3,7 @@ package io.gith.entity.behavior;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.entity.Entity;
+import io.gith.entity.EntityUpdater;
 import io.gith.utils.Direction;
 
 public class Wander implements Behavior
@@ -41,8 +42,8 @@ public class Wander implements Behavior
                 stopMoving();
                 idleTimer = MathUtils.random(IDLE_TIME_MIN, IDLE_TIME_MAX);
             } else {
-                entity.getVelocity().set(direction).scl(entity.getSpeed());
-                entity.setDirection(Direction.fromVector(entity.getVelocity()));
+                entity.getUpdater().getMovementVelocity().set(direction).scl(entity.getSpeed());
+                entity.setDirection(Direction.fromVector(entity.getUpdater().getMovementVelocity()));
             }
         } else {
             idleTimer -= dt;
@@ -50,7 +51,7 @@ public class Wander implements Behavior
                 startMoving();
                 entity.setWalking(true);
             } else {
-                entity.getVelocity().setZero();
+                entity.getUpdater().getMovementVelocity().setZero();
                 entity.setWalking(false);
             }
         }
@@ -71,8 +72,9 @@ public class Wander implements Behavior
     }
 
     private void stopMoving() {
+        EntityUpdater updater = (EntityUpdater) entity.getUpdater();
         moving = false;
         entity.setWalking(false);
-        entity.getVelocity().setZero();
+        updater.getMovementVelocity().setZero();
     }
 }

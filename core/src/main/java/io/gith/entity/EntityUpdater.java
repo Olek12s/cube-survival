@@ -9,10 +9,15 @@ import io.gith.Main;
 import io.gith.Updatable;
 import io.gith.tile.Tile;
 import io.gith.utils.Hitbox;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class EntityUpdater implements Updatable
 {
     private Entity entity;
+    private final Vector2 movementVelocity = new Vector2();
 
     public EntityUpdater(Entity entity) {
         this.entity = entity;
@@ -26,6 +31,10 @@ public class EntityUpdater implements Updatable
     }
 
     private void applyVelocity(float dt) {
+
+        Vector2 finalVelocity = new Vector2().add(movementVelocity);    // sum all vectors influencing entity (walking, knockback, push...)
+        entity.getVelocity().set(finalVelocity);
+
         if (entity.velocity.len2() == 0) return;
 
         Vector2 move = entity.velocity.cpy().scl(dt);

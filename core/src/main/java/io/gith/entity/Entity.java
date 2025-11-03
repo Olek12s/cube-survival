@@ -17,8 +17,8 @@ import java.util.ArrayList;
 public abstract class Entity implements Spawnable
 {
     protected final ArrayList<Behavior> behaviors;
-    protected final Renderable entityRenderer;
-    protected final Updatable entityUpdater;
+    protected final EntityRenderer entityRenderer;
+    protected final EntityUpdater entityUpdater;
     protected boolean spawned;
     protected Vector2 worldPosition;
     protected Direction direction;
@@ -78,10 +78,10 @@ public abstract class Entity implements Spawnable
     }
 
     @Override
-    public Renderable getRenderer() {return entityRenderer;}
+    public EntityRenderer getRenderer() {return entityRenderer;}
 
     @Override
-    public Updatable getUpdater() {return entityUpdater;}
+    public EntityUpdater getUpdater() {return entityUpdater;}
 
     @Override
     public boolean isSpawned() {return spawned;}

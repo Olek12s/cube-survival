@@ -12,18 +12,21 @@ public class Player extends Entity
 
     public Player(Vector2 startPosition) {
         super(EntityID.PLAYER, startPosition);
+        speed = 36f;
     }
 
 
     @Override
     public void update(float dt) {
-        super.update(dt);
         handleInput(dt);
+        super.update(dt);
+        System.out.println("speed: " + velocity);
     }
 
     private void handleInput(float dt) {
         Vector2 inputDir = new Vector2();
         isWalking = false;
+
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             inputDir.y += 1;
             isWalking = true;
@@ -48,9 +51,9 @@ public class Player extends Entity
 
         if (inputDir.len2() > 0) {
             inputDir.nor(); // direction
-            velocity.set(inputDir.scl(speed)); // velocity = speed * direction
+            entityUpdater.getMovementVelocity().set(inputDir).scl(speed); // velocity = speed * direction
         } else {
-            velocity.setZero();
+            entityUpdater.getMovementVelocity().setZero();
         }
     }
 
