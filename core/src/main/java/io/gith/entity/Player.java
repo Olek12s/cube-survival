@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.CameraController;
 import io.gith.Main;
+import io.gith.entity.behavior.Behavior;
+import io.gith.entity.behavior.Wander;
 import io.gith.utils.Direction;
 
 public class Player extends Entity
@@ -14,7 +16,6 @@ public class Player extends Entity
         super(EntityID.PLAYER, startPosition);
         speed = 36f;
     }
-
 
     @Override
     public void update(float dt) {
@@ -52,15 +53,6 @@ public class Player extends Entity
         if (inputDir.len2() > 0) {
             inputDir.nor(); // direction
             entityUpdater.getMovementVelocity().set(inputDir).scl(speed); // velocity = speed * direction
-        } else {
-            entityUpdater.getMovementVelocity().setZero();
         }
-    }
-
-    /*
-    Move entity by velocity vector
-     */
-    private void applyVelocity(float dt) {
-        worldPosition.mulAdd(velocity, dt);
     }
 }
