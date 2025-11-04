@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 @RenderingOrder(Order.TILE)
 public class TileMapController implements Renderable, Updatable
 {
-    private final Map<Vector2, Chunk> loadedChunks;
+    private final Map<Long, Chunk> loadedChunks;
     private final int CHUNK_LOAD_RANGE = 8;
     private final ExecutorService executor;
     private final WorldGenerator worldGen;
@@ -29,14 +29,22 @@ public class TileMapController implements Renderable, Updatable
         lastCameraChunk = new Vector2();
     }
 
+    // pack int x,y into single long key
+    private static long keyFor(int x, int y) {
+        return (((long) x) << 32) | (y & 0xffffffffL);
+    }
+
+    // helper: unpack (if needed)
+    private static int keyToX(long key) { return (int) (key >> 32); }
+    private static int keyToY(long key) { return (int) key; }
+
     @Override
     public void update(float dt) {
         updateLoadedChunks();
     }
 
-    public void updateLoadedChunks() {
+    private void updateLoadedChunks() {
         Vector2 cameraPosition = Main.getInstance().getCameraController().getTargetPosition();
-
 
         int playerChunkX = (int) Math.floor(cameraPosition.x / (Chunk.CHUNK_SIZE * CameraController.TILE_SIZE));
         int playerChunkY = (int) Math.floor(cameraPosition.y / (Chunk.CHUNK_SIZE * CameraController.TILE_SIZE));
@@ -46,44 +54,65 @@ public class TileMapController implements Renderable, Updatable
         if (currentChunk.equals(lastCameraChunk) && !loadedChunks.isEmpty()) return;
         lastCameraChunk.set(currentChunk);
 
-        Set<Vector2> requiredChunks = new HashSet<>();
+        Set<Long> requiredChunks = new HashSet<>();
 
         // select required chunk positions to load
         for (int dx = -CHUNK_LOAD_RANGE; dx <= CHUNK_LOAD_RANGE; dx++) {
             for (int dy = -CHUNK_LOAD_RANGE; dy <= CHUNK_LOAD_RANGE; dy++) {
-                requiredChunks.add(new Vector2(playerChunkX + dx, playerChunkY + dy));
+                requiredChunks.add(keyFor(playerChunkX + dx, playerChunkY + dy));
             }
         }
 
         // remove chunks out of range
-      //  loadedChunks.keySet().removeIf(chunkPos -> !requiredChunks.contains(chunkPos));
+        // loadedChunks.keySet().removeIf(k -> !requiredChunks.contains(k));
 
-        // load required chunks
-        for (Vector2 pos : requiredChunks) {
-            if (!loadedChunks.containsKey(pos)) {
+        // load required chunks (async)
+        for (Long k : requiredChunks) {
+            if (!loadedChunks.containsKey(k)) {
+                final int cx = keyToX(k);
+                final int cy = keyToY(k);
+
                 executor.submit(() -> {
-                    Chunk chunk = worldGen.generateChunk((int) pos.x, (int) pos.y);
+                    Chunk chunk = worldGen.generateChunk(cx, cy);   // generate chunk
+
+                    // insert chunk into map and calculate bitmasks for it and its neighbours
                     synchronized (loadedChunks) {
-                        loadedChunks.put(pos, chunk);
+                        loadedChunks.putIfAbsent(keyFor(cx, cy), chunk);
+                        recalcBitmasksForChunk(chunk);
+
+                        // recalculate neighbors bitmasks
+                        for (int sx = -1; sx <= 1; sx++) {
+                            for (int sy = -1; sy <= 1; sy++) {
+                                if (sx == 0 && sy == 0) continue;   // self
+                                long neighborKey = keyFor(cx + sx, cy + sy);
+                                Chunk neighbor = loadedChunks.get(neighborKey);
+                                if (neighbor != null) {
+                                    recalcBitmasksForChunk(neighbor);
+                                }
+                            }
+                        }
                     }
                 });
             }
         }
     }
 
-    public Map<Vector2, Chunk> getLoadedChunks() {
-        return loadedChunks;
+    private void recalcBitmasksForChunk(Chunk chunk) {
+        if (chunk == null) return;
+        for (int x = 0; x < Chunk.CHUNK_SIZE; x++) {    // recalculate bitnask for every Tile in chunk
+            for (int y = 0; y < Chunk.CHUNK_SIZE; y++) {
+                Tile t = chunk.getTileLocalCoords(x, y);
+                if (t != null) {
+                    t.updateBitmask();
+                }
+            }
+        }
     }
 
 
     public Chunk getChunkFromMap(int chunkX, int chunkY) {
-        Vector2 key = new Vector2(chunkX, chunkY);
+        Long key = keyFor(chunkX, chunkY);
         return loadedChunks.get(key);
-    }
-
-    public void putChunkOnMap(Chunk chunk) {
-        Vector2 key = chunk.getChunkCoords();
-        loadedChunks.putIfAbsent(key, chunk);
     }
 
 
@@ -101,10 +130,8 @@ public class TileMapController implements Renderable, Updatable
                 chunk.setTileLocalCoords(tile, x, y);
             }
         }
-
         return chunk;
     }
-
     public Tile getTileAtIndex(int indexX, int indexY) {
         int chunkX = Math.floorDiv(indexX, Chunk.CHUNK_SIZE);
         int chunkY = Math.floorDiv(indexY, Chunk.CHUNK_SIZE);
@@ -122,16 +149,12 @@ public class TileMapController implements Renderable, Updatable
 
         return chunk.getTileLocalCoords(localX, localY);
     }
-
     public Tile getTileAtWorldPosition(float worldX, float worldY) {
         int tileX = Math.floorDiv((int) worldX, (int) CameraController.TILE_SIZE);
         int tileY = Math.floorDiv((int) worldY, (int) CameraController.TILE_SIZE);
 
         return getTileAtIndex(tileX, tileY);
     }
-
-
-
     public Tile[] getTileNeighbors(Tile tile) {
         Tile[] neighbors = new Tile[8];
 

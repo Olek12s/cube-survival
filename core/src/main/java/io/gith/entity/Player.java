@@ -21,7 +21,6 @@ public class Player extends Entity
     public void update(float dt) {
         handleInput(dt);
         super.update(dt);
-        System.out.println("speed: " + velocity);
     }
 
     private void handleInput(float dt) {
@@ -53,6 +52,10 @@ public class Player extends Entity
         if (inputDir.len2() > 0) {
             inputDir.nor(); // direction
             entityUpdater.getMovementVelocity().set(inputDir).scl(speed); // velocity = speed * direction
+        }
+        else {
+            entityUpdater.getMovementVelocity().set(0, 0);
+            isWalking = false;
         }
     }
 }

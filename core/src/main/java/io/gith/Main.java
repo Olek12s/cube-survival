@@ -75,8 +75,8 @@ public class Main extends Game
         this.slime = new Slime(new Vector2(16, 16));
 
         Random r = new Random();
-        for (int i = 0; i < 100; i++) {
-            new Slime(new Vector2(r.nextInt(100), r.nextInt(100)));
+        for (int i = 0; i < 50; i++) {
+            new Slime(new Vector2(r.nextInt(1000), r.nextInt(1000)));
         }
         cameraController = new CameraController(player.getWorldPosition());
     }
