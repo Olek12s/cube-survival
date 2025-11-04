@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import io.gith.*;
 import io.gith.procedularGeneration.WorldGenerator;
 import io.gith.procedularGeneration.overworld.Overworld;
+import lombok.Getter;
 
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -14,6 +15,7 @@ import java.util.concurrent.Executors;
 @RenderingOrder(Order.TILE)
 public class TileMapController implements Renderable, Updatable
 {
+    @Getter
     private final Map<Long, Chunk> loadedChunks;
     private final int CHUNK_LOAD_RANGE = 8;
     private final ExecutorService executor;
