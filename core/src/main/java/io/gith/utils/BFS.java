@@ -9,7 +9,7 @@ import io.gith.tile.TileMapController;
 
 import java.util.*;
 
-class BFS {
+public class BFS {
     public static ArrayList<Tile> findPathTiles(Tile start, Tile end, boolean skipCollidables) {
         TileMapController tileMap = Main.getInstance().getTileMap();
 

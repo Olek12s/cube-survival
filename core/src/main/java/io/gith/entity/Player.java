@@ -3,10 +3,6 @@ package io.gith.entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import io.gith.CameraController;
-import io.gith.Main;
-import io.gith.entity.behavior.Behavior;
-import io.gith.entity.behavior.Wander;
 import io.gith.utils.Direction;
 
 public class Player extends Entity
@@ -14,7 +10,7 @@ public class Player extends Entity
 
     public Player(Vector2 startPosition) {
         super(EntityID.PLAYER, startPosition);
-        speed = 36f;
+        speed = 80f;
     }
 
     @Override

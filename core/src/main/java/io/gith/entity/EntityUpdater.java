@@ -8,6 +8,7 @@ import io.gith.CameraController;
 import io.gith.Main;
 import io.gith.Updatable;
 import io.gith.tile.Tile;
+import io.gith.utils.Direction;
 import io.gith.utils.Hitbox;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,11 +32,17 @@ public class EntityUpdater implements Updatable
     }
 
     private void applyVelocity(float dt) {
-
         Vector2 finalVelocity = new Vector2().add(movementVelocity);    // sum all vectors influencing entity (walking, knockback, push...)
         entity.getVelocity().set(finalVelocity);
 
-        if (entity.velocity.len2() == 0) return;
+        if (finalVelocity.len2() > 0) {
+            entity.setWalking(true);
+            entity.setDirection(Direction.fromVector(finalVelocity));
+        }
+        else {
+            entity.setWalking(false);
+            return;
+        }
 
         Vector2 move = entity.velocity.cpy().scl(dt);
         float distance = move.len();

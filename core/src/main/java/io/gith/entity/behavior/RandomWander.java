@@ -6,13 +6,13 @@ import io.gith.entity.Entity;
 import io.gith.entity.EntityUpdater;
 import io.gith.utils.Direction;
 
-public class Wander implements Behavior
+public class RandomWander implements Behavior
 {
     private Entity entity;
 
+    private final Vector2 direction = new Vector2();
     private float moveTimer;
     private float idleTimer;
-    private Vector2 direction;
     private boolean moving;
 
     private static final float MOVE_TIME_MIN = 1.0f;
@@ -27,7 +27,6 @@ public class Wander implements Behavior
 
     @Override
     public void start() {
-        direction = new Vector2();
         moving = false;
         idleTimer = MathUtils.random(IDLE_TIME_MIN, IDLE_TIME_MAX);
     }
@@ -43,24 +42,21 @@ public class Wander implements Behavior
                 idleTimer = MathUtils.random(IDLE_TIME_MIN, IDLE_TIME_MAX);
             } else {
                 entity.getUpdater().getMovementVelocity().set(direction).scl(entity.getSpeed());
-                entity.setDirection(Direction.fromVector(entity.getUpdater().getMovementVelocity()));
             }
         } else {
             idleTimer -= dt;
             if (idleTimer <= 0) {
                 startMoving();
-                entity.setWalking(true);
             } else {
                 entity.getUpdater().getMovementVelocity().setZero();
-                entity.setWalking(false);
             }
         }
     }
 
     @Override
     public void end() {
-        entity.getVelocity().setZero();
-        entity.setWalking(false);
+        entity.getUpdater().getMovementVelocity().setZero();
+        moving = false;
     }
 
     private void startMoving() {
@@ -72,9 +68,7 @@ public class Wander implements Behavior
     }
 
     private void stopMoving() {
-        EntityUpdater updater = (EntityUpdater) entity.getUpdater();
         moving = false;
-        entity.setWalking(false);
-        updater.getMovementVelocity().setZero();
+        entity.getUpdater().getMovementVelocity().setZero();
     }
 }
