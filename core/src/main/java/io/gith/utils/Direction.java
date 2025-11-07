@@ -23,6 +23,17 @@ public enum Direction
         }
     }
 
+    public static Vector2 directionToVector(Direction dir) {
+        switch (dir) {
+            case UP: return new Vector2(0, 1);
+            case DOWN: return new Vector2(0, -1);
+            case LEFT: return new Vector2(-1, 0);
+            case RIGHT: return new Vector2(1, 0);
+            default: return new Vector2(0, 0);
+        }
+    }
+
+
     public static final int[][] DIRS8 = {
         {-1, -1}, {-1, 0}, {-1, 1},
         {0, -1},           {0, 1},

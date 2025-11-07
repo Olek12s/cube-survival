@@ -1,94 +1,125 @@
 package io.gith.entity.behavior;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.Main;
 import io.gith.entity.Entity;
 import io.gith.tile.Tile;
-import io.gith.tile.TileMapController;
 import io.gith.utils.BFS;
+import io.gith.utils.Direction;
+import lombok.Getter;
 
 import java.util.ArrayList;
 
+@Getter
 public class Follow implements Behavior {
-
     private Entity entity;
-    private Vector2 target;
-    private ArrayList<Tile> path = new ArrayList<>();
-    private int currentStep = 0;
-    private float repathTimer = 0f;
-    private final float repathInterval = 1.0f;
-    private final boolean skipCollidables = true;
+    private Vector2 positionToFollow;
+    private ArrayList<Tile> tilePath;
+    private Rectangle hitboxAABB;
 
-    public Follow(Vector2 target) {
-        this.target = target;
+    private final float RECALCULATE_INTERVAL = 0.03f;    // x seconds
+    private float recalcTimer = 0f;
+    private final int PRECISION_MARGIN = 12;            // world units error tolerance - how many units entity's hitbox middle point can differ from tile's middle point
+
+    public Follow(Vector2 positionToFollow) {
+        this.positionToFollow = positionToFollow;
+        this.tilePath = new ArrayList<>();
     }
 
     @Override
     public void start() {
-        recalcPath();
+        recalculatePath();
+    }
+
+    private void recalculatePath() {
+        if (entity == null) return;
+
+        Tile startTile = Main.getInstance().getTileMap().getTileAtWorldPosition(entity.getWorldPosition());
+        Tile endTile = Main.getInstance().getTileMap().getTileAtWorldPosition(positionToFollow);
+
+        if (startTile != null && endTile != null) {
+            this.tilePath = BFS.findPathTiles(startTile, endTile, true, false);
+
+            // delete first tile to prevent "shaking" for 1 tick after recalculating path
+            if (tilePath.size() > 2)
+            {
+                tilePath.remove(0);
+            }
+        }
     }
 
     @Override
     public void tick(float dt) {
-        if (entity == null || target == null) return;
+        if (entity == null) return;
 
+        // update hitbox to the current update tick
+        hitboxAABB = entity.getHitbox().getBoundingBoxAABB();
 
-        repathTimer += dt;
-        if (repathTimer >= repathInterval) {
-            recalcPath();
-            repathTimer = 0f;
+        // recalculate path if timer reached interval
+        recalcTimer += dt;
+        if (recalcTimer >= RECALCULATE_INTERVAL) {
+            recalcTimer = 0f;
+            recalculatePath();
         }
 
-        if (path == null || path.isEmpty() || currentStep >= path.size()) {
-            entity.getEntityUpdater().getMovementVelocity().setZero();
+        // if no path - stay in place and stop walking
+        if (tilePath == null || tilePath.isEmpty()) {
+            entity.getUpdater().getMovementVelocity().set(0, 0);
+            entity.setWalking(false);
             return;
         }
 
-        Tile currentTile = path.get(currentStep);
-        Vector2 tileWorldPos = currentTile.getWorldPosition();
-        Vector2 pos = entity.getWorldPosition();
+        // set target to follow as next tile from the list
+        Tile targetTile = tilePath.get(0);
+        Vector2 targetCenter = new Vector2(
+            targetTile.getWorldX() + Main.getInstance().getCameraController().TILE_SIZE / 2f,
+            targetTile.getWorldY() + Main.getInstance().getCameraController().TILE_SIZE / 2f
+        );
 
-        Vector2 dir = new Vector2(tileWorldPos).sub(pos);
+        Vector2 entityCenter = entity.getHitbox().getMiddlePoint();
+        Vector2 direction = targetCenter.cpy().sub(entityCenter);
 
+        // if entity is close enough to the middle point of the target tile
+        if (direction.len() < PRECISION_MARGIN) {
+            tilePath.remove(0); // remove target tile
 
-        if (dir.len() < 4f) {
-            currentStep++;
-            return;
+            // if no path - stay in place and stop walking
+            if (tilePath.isEmpty()) {
+                entity.getUpdater().getMovementVelocity().set(0, 0);
+                entity.setWalking(false);
+                return;
+            }
+            else    // else - set target to follow as next tile from the list
+            {
+                targetTile = tilePath.get(0);
+                targetCenter.set(
+                    targetTile.getWorldX() + Main.getInstance().getCameraController().TILE_SIZE / 2f,
+                    targetTile.getWorldY() + Main.getInstance().getCameraController().TILE_SIZE / 2f
+                );
+                direction.set(targetCenter).sub(entityCenter);
+            }
         }
-
-        dir.nor().scl(entity.getSpeed());
-        entity.getEntityUpdater().getMovementVelocity().set(dir);
+        // go to the target tile
+        direction.nor();
+        entity.getUpdater().getMovementVelocity().set(direction).scl(entity.getSpeed());
+        entity.setWalking(true);
     }
 
     @Override
     public void end() {
-        path.clear();
-        currentStep = 0;
-        if (entity != null)
-            entity.getEntityUpdater().getMovementVelocity().setZero();
+        tilePath.clear();
+        entity.getUpdater().getMovementVelocity().set(0, 0);
+        entity.setWalking(false);
     }
 
     @Override
     public void setEntity(Entity entity) {
         this.entity = entity;
+        this.hitboxAABB = entity.getHitbox().getBoundingBoxAABB();
     }
 
-    private void recalcPath() {
-        TileMapController tileMap = Main.getInstance().getTileMap();
-
-        Tile startTile = tileMap.getTileAtWorldPosition(
-            entity.getWorldPosition().x,
-            entity.getWorldPosition().y
-        );
-
-        Tile endTile = tileMap.getTileAtWorldPosition(
-            target.x,
-            target.y
-        );
-
-        if (startTile == null || endTile == null) return;
-
-        path = BFS.findPathTiles(startTile, endTile, skipCollidables);
-        currentStep = (path.size() > 1) ? 1 : 0;
+    public ArrayList<Tile> getPath() {
+        return tilePath;
     }
 }

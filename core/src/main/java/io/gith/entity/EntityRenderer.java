@@ -1,6 +1,7 @@
 package io.gith.entity;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,10 +9,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import io.gith.CameraController;
 import io.gith.Main;
 import io.gith.Renderable;
+import io.gith.entity.behavior.Behavior;
+import io.gith.entity.behavior.Follow;
+import io.gith.tile.Tile;
 import io.gith.utils.Direction;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -66,5 +72,29 @@ public class EntityRenderer implements Renderable
 
         shapeRenderer.setColor(1, 0, 0, 1);
         shapeRenderer.polygon(entity.getHitbox().getPolygon().getTransformedVertices());
+
+        renderFollowPathDebug(shapeRenderer);
     }
+
+    private void renderFollowPathDebug(ShapeRenderer shapeRenderer) {
+        for (Behavior behavior : entity.getBehaviors()) {
+            if (behavior instanceof Follow follow) {
+                ArrayList<Tile> path = follow.getPath();
+                if (path == null || path.isEmpty()) return;
+
+                for (int i = 0; i < path.size(); i++)
+                {
+                    Tile t = path.get(i);
+                    Vector2 pos = t.getWorldPosition();
+                    float tileSize = CameraController.TILE_SIZE;
+
+                    shapeRenderer.setColor(1f, 0f, 1, 0.95f);
+                    shapeRenderer.rect(pos.x, pos.y, tileSize, tileSize);
+                }
+
+            }
+        }
+    }
+
+
 }

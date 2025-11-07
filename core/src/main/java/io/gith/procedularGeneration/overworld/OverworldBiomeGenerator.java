@@ -14,8 +14,8 @@ public class OverworldBiomeGenerator
     public OverworldBiomeGenerator(int seed) {
         this.temperatureNoise = new Perlin(seed, 4, 0.5f, 2.0f);
         this.humidityNoise = new Perlin(seed+1, 2, 0.5f, 2.0f);
-        this.continentNoise = new Perlin(seed+2, 2, 0.5f, 2.0f);
-        this.heightNoise = new Perlin(seed+3, 2, 0.5f, 2.0f);
+        this.continentNoise = new Perlin(seed+2, 2, 0.5f, 42.0f);
+        this.heightNoise = new Perlin(seed+3, 2, 0.5f, 42.0f);   // 2.0
     }
 
     public BiomeName generateBiome(double worldX, double worldY) {

@@ -100,6 +100,12 @@ public class Autotiler
         maskToVariant.put((byte)0b0100_0010, new Pair<>(0, 5));
         maskToVariant.put((byte)0b0010_0101, new Pair<>(6, 4));
         maskToVariant.put((byte)0b0101_0010, new Pair<>(4, 6));
+        maskToVariant.put((byte)0b1001_0010, new Pair<>(3, 4));
+
+        //temp
+        maskToVariant.put((byte)0b0010_1001, new Pair<>(2, 3));
+        maskToVariant.put((byte)0b1010_0100, new Pair<>(5, 3));
+        maskToVariant.put((byte)0b0100_1010, new Pair<>(5, 3));
     }
 
 
@@ -127,7 +133,7 @@ public class Autotiler
 
 
     public static void assignBitmask(Tile tile) {
-        Tile[] neighboringTiles = Main.getInstance().getTileMap().getTileNeighbors(tile);
+        Tile[] neighboringTiles = Main.getInstance().getTileMap().getTile8Neighbors(tile);
 
         int[] axialIndices = {0, 2, 4, 6}; // N, E, S, W
         byte bitmask = 0b0000_0000;

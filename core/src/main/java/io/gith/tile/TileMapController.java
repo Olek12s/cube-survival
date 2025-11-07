@@ -157,7 +157,17 @@ public class TileMapController implements Renderable, Updatable
 
         return getTileAtIndex(tileX, tileY);
     }
-    public Tile[] getTileNeighbors(Tile tile) {
+
+    public Tile getTileAtWorldPosition(Vector2 pos) {
+        float worldX = pos.x;
+        float worldY = pos.y;
+
+        int tileX = Math.floorDiv((int) worldX, (int) CameraController.TILE_SIZE);
+        int tileY = Math.floorDiv((int) worldY, (int) CameraController.TILE_SIZE);
+
+        return getTileAtIndex(tileX, tileY);
+    }
+    public Tile[] getTile8Neighbors(Tile tile) {
         Tile[] neighbors = new Tile[8];
 
 
@@ -173,6 +183,54 @@ public class TileMapController implements Renderable, Updatable
             {-1, -1},// SW
             {-1, 0}, // W
             {-1, 1}  // NW
+        };
+
+        for (int i = 0; i < offsets.length; i++) {
+            int nx = x + offsets[i][0];
+            int ny = y + offsets[i][1];
+            neighbors[i] = getTileAtIndex(nx, ny);
+        }
+        return neighbors;
+    }
+
+    public Tile[] getTile8NeighborsDiagLast(Tile tile) {
+        Tile[] neighbors = new Tile[8];
+
+
+        int x = (int) tile.getIndexPosition().x;
+        int y = (int) tile.getIndexPosition().y;
+
+        int[][] offsets = {
+            {0, 1},   // N
+            {1, 0},   // E
+            {0, -1},  // S
+            {-1, 0},  // W
+            {1, 1},   // NE
+            {1, -1},  // SE
+            {-1, -1}, // SW
+            {-1, 1}   // NW
+        };
+
+        for (int i = 0; i < offsets.length; i++) {
+            int nx = x + offsets[i][0];
+            int ny = y + offsets[i][1];
+            neighbors[i] = getTileAtIndex(nx, ny);
+        }
+        return neighbors;
+    }
+
+    public Tile[] getTile4Neighbors(Tile tile) {
+        Tile[] neighbors = new Tile[4];
+
+
+        int x = (int) tile.getIndexPosition().x;
+        int y = (int) tile.getIndexPosition().y;
+
+        int[][] offsets = {
+            {0, 1},  // N
+            {1, 0},  // E
+            {0, -1}, // S
+            {-1, 0}, // W
         };
 
         for (int i = 0; i < offsets.length; i++) {
