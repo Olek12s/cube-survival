@@ -10,6 +10,7 @@ import io.gith.utils.Direction;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 @Getter
 public class Follow implements Behavior {
@@ -18,11 +19,13 @@ public class Follow implements Behavior {
     private ArrayList<Tile> tilePath;
     private Rectangle hitboxAABB;
 
-    private final float RECALCULATE_INTERVAL = 0.03f;    // x seconds
+    private final float RECALCULATE_INTERVAL;    // x seconds
     private float recalcTimer = 0f;
     private final int PRECISION_MARGIN = 12;            // world units error tolerance - how many units entity's hitbox middle point can differ from tile's middle point
 
     public Follow(Vector2 positionToFollow) {
+        Random random = new Random();
+        this.RECALCULATE_INTERVAL = 0.20f + random.nextFloat() * (0.34f - 0.20f);   // [0.20, 0.33]
         this.positionToFollow = positionToFollow;
         this.tilePath = new ArrayList<>();
     }
