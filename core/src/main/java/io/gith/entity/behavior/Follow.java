@@ -6,7 +6,9 @@ import io.gith.CameraController;
 import io.gith.Main;
 import io.gith.entity.Entity;
 import io.gith.tile.Tile;
+import io.gith.utils.Astar;
 import io.gith.utils.BFS;
+import io.gith.utils.Pathfinder;
 import lombok.Getter;
 import java.util.ArrayList;
 import java.util.Random;
@@ -17,6 +19,7 @@ public class Follow implements Behavior {
     private final Vector2 positionToFollow;
     private ArrayList<Tile> tilePath;
     private Rectangle hitboxAABB;
+    private Pathfinder pathfinder;
 
     private final float RECALCULATE_INTERVAL;    // x seconds
     private float recalcTimer = 0f;
@@ -27,6 +30,7 @@ public class Follow implements Behavior {
         this.RECALCULATE_INTERVAL = 0.20f + random.nextFloat() * (0.34f - 0.20f);   // [0.20, 0.33]
         this.positionToFollow = positionToFollow;
         this.tilePath = new ArrayList<>();
+        this.pathfinder = new Astar();
     }
 
     @Override
@@ -41,7 +45,7 @@ public class Follow implements Behavior {
         Tile endTile = Main.getInstance().getTileMap().getTileAtWorldPosition(positionToFollow);
 
         if (startTile != null && endTile != null) {
-            this.tilePath = BFS.findPathTiles(startTile, endTile, true, false);
+            this.tilePath = pathfinder.findPathTiles(startTile, endTile, true, false);
 
             // delete first tile to prevent "shaking" for 1 tick after recalculating path
             if (tilePath.size() > 2)

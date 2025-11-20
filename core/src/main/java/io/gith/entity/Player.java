@@ -10,7 +10,7 @@ public class Player extends Entity
 
     public Player(Vector2 startPosition) {
         super(EntityID.PLAYER, startPosition);
-        speed = 70f;
+        speed = 200f;
     }
 
     @Override
