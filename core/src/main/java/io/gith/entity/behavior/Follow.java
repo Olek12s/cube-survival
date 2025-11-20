@@ -2,20 +2,19 @@ package io.gith.entity.behavior;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import io.gith.CameraController;
 import io.gith.Main;
 import io.gith.entity.Entity;
 import io.gith.tile.Tile;
 import io.gith.utils.BFS;
-import io.gith.utils.Direction;
 import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.Random;
 
 @Getter
 public class Follow implements Behavior {
     private Entity entity;
-    private Vector2 positionToFollow;
+    private final Vector2 positionToFollow;
     private ArrayList<Tile> tilePath;
     private Rectangle hitboxAABB;
 
@@ -47,7 +46,7 @@ public class Follow implements Behavior {
             // delete first tile to prevent "shaking" for 1 tick after recalculating path
             if (tilePath.size() > 2)
             {
-                tilePath.remove(0);
+                tilePath.removeFirst();
             }
         }
     }
@@ -74,10 +73,10 @@ public class Follow implements Behavior {
         }
 
         // set target to follow as next tile from the list
-        Tile targetTile = tilePath.get(0);
+        Tile targetTile = tilePath.getFirst();
         Vector2 targetCenter = new Vector2(
-            targetTile.getWorldX() + Main.getInstance().getCameraController().TILE_SIZE / 2f,
-            targetTile.getWorldY() + Main.getInstance().getCameraController().TILE_SIZE / 2f
+            targetTile.getWorldX() + CameraController.TILE_SIZE / 2f,
+            targetTile.getWorldY() + CameraController.TILE_SIZE / 2f
         );
 
         Vector2 entityCenter = entity.getHitbox().getMiddlePoint();
@@ -85,7 +84,7 @@ public class Follow implements Behavior {
 
         // if entity is close enough to the middle point of the target tile
         if (direction.len() < PRECISION_MARGIN) {
-            tilePath.remove(0); // remove target tile
+            tilePath.removeFirst(); // remove target tile
 
             // if no path - stay in place and stop walking
             if (tilePath.isEmpty()) {
@@ -95,10 +94,10 @@ public class Follow implements Behavior {
             }
             else    // else - set target to follow as next tile from the list
             {
-                targetTile = tilePath.get(0);
+                targetTile = tilePath.getFirst();
                 targetCenter.set(
-                    targetTile.getWorldX() + Main.getInstance().getCameraController().TILE_SIZE / 2f,
-                    targetTile.getWorldY() + Main.getInstance().getCameraController().TILE_SIZE / 2f
+                    targetTile.getWorldX() + CameraController.TILE_SIZE / 2f,
+                    targetTile.getWorldY() + CameraController.TILE_SIZE / 2f
                 );
                 direction.set(targetCenter).sub(entityCenter);
             }
