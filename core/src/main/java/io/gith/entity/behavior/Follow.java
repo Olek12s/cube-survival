@@ -108,7 +108,7 @@ public class Follow implements Behavior {
         }
         // go to the target tile
         direction.nor();
-        entity.getUpdater().getMovementVelocity().set(direction).scl(entity.getSpeed());
+        entity.setAiDesiredDirection(direction);
         entity.setWalking(true);
     }
 

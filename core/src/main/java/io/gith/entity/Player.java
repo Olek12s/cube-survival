@@ -4,13 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.utils.Direction;
+import lombok.Getter;
 
+@Getter
 public class Player extends Entity
 {
+    private final Vector2 desiredDirection = new Vector2();
 
     public Player(Vector2 startPosition) {
         super(EntityID.PLAYER, startPosition);
-        speed = 200f;
+        speed = 120f;
     }
 
     @Override
@@ -19,39 +22,22 @@ public class Player extends Entity
         super.update(dt);
     }
 
+    @Override
+    public Vector2 getMovementInput() {
+        return desiredDirection.cpy();
+    }
+
+
     private void handleInput(float dt) {
-        Vector2 inputDir = new Vector2();
-        isWalking = false;
+        desiredDirection.setZero();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            inputDir.y += 1;
-            isWalking = true;
-            direction = Direction.UP;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            inputDir.y -= 1;
-            isWalking = true;
-            direction = Direction.DOWN;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            inputDir.x -= 1;
-            isWalking = true;
-            direction = Direction.LEFT;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            inputDir.x += 1;
-            isWalking = true;
-            direction = Direction.RIGHT;
-        }
-        if (velocity.len2() > 0) velocity.nor().scl(speed);
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) desiredDirection.y += 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) desiredDirection.y -= 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) desiredDirection.x -= 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) desiredDirection.x += 1;
 
-        if (inputDir.len2() > 0) {
-            inputDir.nor(); // direction
-            entityUpdater.getMovementVelocity().set(inputDir).scl(speed); // velocity = speed * direction
-        }
-        else {
-            entityUpdater.getMovementVelocity().set(0, 0);
-            isWalking = false;
+        if (desiredDirection.len2() > 0) {
+            desiredDirection.nor();
         }
     }
 }

@@ -20,6 +20,8 @@ public class EntityUpdater implements Updatable
     private Entity entity;
     private final Vector2 movementVelocity = new Vector2();
 
+
+
     public EntityUpdater(Entity entity) {
         this.entity = entity;
     }
@@ -40,62 +42,60 @@ public class EntityUpdater implements Updatable
             entity.despawn();
         }
     }
-
     private void applyVelocity(float dt) {
-        Vector2 finalVelocity = new Vector2().add(movementVelocity);    // sum all vectors influencing entity (walking, knockback, push...)
-        entity.getVelocity().set(finalVelocity);
+        Vector2 input = entity.getMovementInput(); // input direction, normalized or zero
+        Vector2 targetVelocity;
 
-        if (finalVelocity.len2() > 0) {
+        if (input.len2() > 0) { // player movement
+            targetVelocity = input.cpy().scl(entity.getSpeed());
+        } else {    // AI movement
+            targetVelocity = entity.getAiDesiredDirection().cpy().scl(entity.getSpeed());
+        }
+
+        // acceleration // deacceleration
+        if (targetVelocity.len2() > 0) {
+            entity.getVelocity().lerp(targetVelocity, entity.getMovementAcceleration());
+        } else {
+            entity.getVelocity().lerp(new Vector2(0, 0), entity.getMovementDeacceleration());
+        }
+
+        if (entity.getVelocity().len2() > 0.01f)
+        {
             entity.setWalking(true);
-            entity.setDirection(Direction.fromVector(finalVelocity));
+            entity.setDirection(Direction.fromVector(entity.getVelocity()));
         }
-        else {
+        else
+        {
             entity.setWalking(false);
-            return;
         }
 
-        Vector2 move = entity.velocity.cpy().scl(dt);
+        // Move entity with collisions
+        Vector2 move = entity.getVelocity().cpy().scl(dt);
         float distance = move.len();
         float step = 1f;
         int steps = (int) Math.floor(distance / step);
 
         Vector2 stepDir = move.cpy().nor().scl(step);
-        Vector2 newPos = entity.worldPosition.cpy();
+        Vector2 newPos = entity.getWorldPosition().cpy();
 
-        // check every axis separately for "sliding" effect
+        // check every axis separately for sliding
         for (int i = 0; i < steps; i++) {
-            // X axis steps
             Vector2 testX = new Vector2(newPos.x + stepDir.x, newPos.y);
-            if (!collidesAtPosition(testX)) {
-                newPos.x = testX.x;
-            }
+            if (!collidesAtPosition(testX)) newPos.x = testX.x;
 
-            // Y axis steps
             Vector2 testY = new Vector2(newPos.x, newPos.y + stepDir.y);
-            if (!collidesAtPosition(testY)) {
-                newPos.y = testY.y;
-            }
+            if (!collidesAtPosition(testY)) newPos.y = testY.y;
         }
 
-        // rest of the move, where distance < step
-        // remaining = move - stepDir * steps
+        // remaining movement less than step
         Vector2 remaining = move.cpy().sub(stepDir.cpy().scl(steps));
-
-        // check every axis separately for "sliding" effect
         Vector2 testX = new Vector2(newPos.x + remaining.x, newPos.y);
-        if (!collidesAtPosition(testX)) {
-            newPos.x = testX.x;
-        }
+        if (!collidesAtPosition(testX)) newPos.x = testX.x;
         Vector2 testY = new Vector2(newPos.x, newPos.y + remaining.y);
-        if (!collidesAtPosition(testY)) {
-            newPos.y = testY.y;
-        }
+        if (!collidesAtPosition(testY)) newPos.y = testY.y;
 
-        entity.worldPosition.set(newPos);   // update entity's position
+        entity.getWorldPosition().set(newPos);
     }
-
-
-
 
     private boolean collidesAtPosition(Vector2 position) {
         var tileMap = Main.getInstance().getTileMap();

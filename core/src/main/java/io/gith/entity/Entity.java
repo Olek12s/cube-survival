@@ -24,7 +24,10 @@ public abstract class Entity implements Spawnable
     protected Direction direction;
     protected Vector2 velocity;
     protected Hitbox hitbox;
+    private Vector2 aiDesiredDirection = new Vector2();
     protected float speed = 400f;
+    protected float movementAcceleration = 0.2f;    // % max speed per tick
+    protected float movementDeacceleration = 0.33f;  // % max speed per tick
     protected boolean isWalking;
     protected EntityID id;
     protected float currentHealth;
@@ -74,6 +77,13 @@ public abstract class Entity implements Spawnable
             b.tick(dt);
         }
     }
+
+    public Vector2 getMovementInput() {
+        return Vector2.Zero; // default: no input
+    }
+
+
+
 
     @Override
     public void renderTexture() {

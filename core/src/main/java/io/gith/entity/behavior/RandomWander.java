@@ -41,7 +41,9 @@ public class RandomWander implements Behavior
                 stopMoving();
                 idleTimer = MathUtils.random(IDLE_TIME_MIN, IDLE_TIME_MAX);
             } else {
-                entity.getUpdater().getMovementVelocity().set(direction).scl(entity.getSpeed());
+                direction.nor();
+                entity.setAiDesiredDirection(direction);
+                entity.setWalking(true);
             }
         } else {
             idleTimer -= dt;
