@@ -5,6 +5,7 @@ import io.gith.Renderable;
 import io.gith.Spawnable;
 import io.gith.Updatable;
 import io.gith.entity.behavior.Behavior;
+import io.gith.tile.Chunk;
 import io.gith.utils.Direction;
 import io.gith.utils.Hitbox;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 public abstract class Entity implements Spawnable
 {
     protected final ArrayList<Behavior> behaviors;
+    private Chunk currentChunk;
     protected final EntityRenderer entityRenderer;
     protected final EntityUpdater entityUpdater;
     protected boolean spawned;
@@ -25,7 +27,7 @@ public abstract class Entity implements Spawnable
     protected Vector2 velocity;
     protected Hitbox hitbox;
     private Vector2 aiDesiredDirection = new Vector2();
-    protected float speed = 400f;
+    protected float speed = 800f;
     protected float movementAcceleration = 0.2f;    // % max speed per tick
     protected float movementDeacceleration = 0.33f;  // % max speed per tick
     protected boolean isWalking;

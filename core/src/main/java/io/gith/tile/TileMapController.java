@@ -117,6 +117,20 @@ public class TileMapController implements Renderable, Updatable
         return loadedChunks.get(key);
     }
 
+    public Chunk getChunkFromWorldPosition(float worldX, float worldY) {
+        int chunkX = (int) Math.floor(worldX / (Chunk.CHUNK_SIZE * CameraController.TILE_SIZE));
+        int chunkY = (int) Math.floor(worldY / (Chunk.CHUNK_SIZE * CameraController.TILE_SIZE));
+        return getChunkFromMap(chunkX, chunkY);
+    }
+
+    public Chunk getChunkFromWorldPosition(Vector2 worldPos) {
+        int chunkX = (int) Math.floor(worldPos.x / (Chunk.CHUNK_SIZE * CameraController.TILE_SIZE));
+        int chunkY = (int) Math.floor(worldPos.y / (Chunk.CHUNK_SIZE * CameraController.TILE_SIZE));
+        return getChunkFromMap(chunkX, chunkY);
+    }
+
+
+
 
     public static Chunk createChunkFromIDs(short[][] tileIDs, Vector2 chunkPos) {
         Chunk chunk = new Chunk(chunkPos);

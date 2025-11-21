@@ -7,7 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import io.gith.CameraController;
 import io.gith.Main;
 import io.gith.Updatable;
+import io.gith.tile.Chunk;
 import io.gith.tile.Tile;
+import io.gith.tile.TileMapController;
 import io.gith.utils.Direction;
 import io.gith.utils.Hitbox;
 import lombok.Getter;
@@ -32,6 +34,7 @@ public class EntityUpdater implements Updatable
         checkHealthDespawnActionOnZeroOrLess();
         applyVelocity(dt);
         updateHitbox();
+        updateChunkAssocation();
     }
 
     /**
@@ -78,21 +81,44 @@ public class EntityUpdater implements Updatable
         Vector2 stepDir = move.cpy().nor().scl(step);
         Vector2 newPos = entity.getWorldPosition().cpy();
 
+        TileMapController tileMap = Main.getInstance().getTileMap();
+        Chunk targetChunk = tileMap.getChunkFromWorldPosition(newPos);
+
         // check every axis separately for sliding
         for (int i = 0; i < steps; i++) {
+            // step X
             Vector2 testX = new Vector2(newPos.x + stepDir.x, newPos.y);
-            if (!collidesAtPosition(testX)) newPos.x = testX.x;
+            Chunk chunkX = tileMap.getChunkFromWorldPosition(testX);
+            if (!collidesAtPosition(testX) && chunkX != null && chunkX.isWithinChunk(testX)) {
+                newPos.x = testX.x;
+            }
 
+            // step Y
             Vector2 testY = new Vector2(newPos.x, newPos.y + stepDir.y);
-            if (!collidesAtPosition(testY)) newPos.y = testY.y;
+            Chunk chunkY = tileMap.getChunkFromWorldPosition(testY);
+            if (!collidesAtPosition(testY) && chunkY != null && chunkY.isWithinChunk(testY)) {
+                newPos.y = testY.y;
+            }
         }
+
 
         // remaining movement less than step
         Vector2 remaining = move.cpy().sub(stepDir.cpy().scl(steps));
+
+        // step X
         Vector2 testX = new Vector2(newPos.x + remaining.x, newPos.y);
-        if (!collidesAtPosition(testX)) newPos.x = testX.x;
+        Chunk chunkX = tileMap.getChunkFromWorldPosition(testX);
+        if (!collidesAtPosition(testX) && chunkX != null && chunkX.isWithinChunk(testX)) {
+            newPos.x = testX.x;
+        }
+
+        // step Y
         Vector2 testY = new Vector2(newPos.x, newPos.y + remaining.y);
-        if (!collidesAtPosition(testY)) newPos.y = testY.y;
+        Chunk chunkY = tileMap.getChunkFromWorldPosition(testY);
+        if (!collidesAtPosition(testY) && chunkY != null && chunkY.isWithinChunk(testY)) {
+            newPos.y = testY.y;
+        }
+
 
         entity.getWorldPosition().set(newPos);
     }
@@ -128,8 +154,36 @@ public class EntityUpdater implements Updatable
         //
         return false;
     }
-
     private void updateHitbox() {
         entity.getHitbox().setPosition(entity.getWorldPosition().x, entity.getWorldPosition().y);
+    }
+    private void updateChunkAssocation() {
+        Chunk currentChunk = Main.getInstance().getTileMap().getChunkFromWorldPosition(entity.getWorldPosition());
+
+        // if entity had no associated chunk before
+        if (entity.getCurrentChunk() == null) {
+            if (currentChunk != null) {
+                entity.setCurrentChunk(currentChunk);
+                System.out.println("Added not associated entity to the: " + currentChunk);
+                currentChunk.getEntities().add(entity);
+            }
+            return;
+        }
+
+        // if entity left its associated chunk
+        if (!entity.getCurrentChunk().isWithinChunk(entity.getWorldPosition())) {
+            entity.getCurrentChunk().getEntities().remove(entity);  // remove from the old chunk
+
+            // add entity to the new chunk
+            if (currentChunk != null) {
+                entity.setCurrentChunk(currentChunk);
+                System.out.println("Entity changed chunk to the: " + currentChunk);
+                currentChunk.getEntities().add(entity);
+            }
+            else {
+                System.out.println("Entity changed chunk to null");
+                entity.setCurrentChunk(null);   // if chunk was not loaded - set chunk to the null
+            }
+        }
     }
 }

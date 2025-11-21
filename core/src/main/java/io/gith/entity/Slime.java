@@ -20,7 +20,7 @@ public class Slime extends Entity
         this.wander.start();
         behaviors.add(wander);
 
-        speed = 80f;
+        speed = 180f;
 
         follow = new Follow(Main.getInstance().getPlayer().getWorldPosition());
         follow.setEntity(this);

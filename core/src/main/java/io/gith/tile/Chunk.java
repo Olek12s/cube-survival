@@ -3,19 +3,24 @@ package io.gith.tile;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.Main;
+import io.gith.entity.Entity;
+
+import java.util.ArrayList;
 
 import static io.gith.CameraController.TILE_SIZE;
 
 public class Chunk {
-    public static final int CHUNK_SIZE = 8;
+    public static final int CHUNK_SIZE = 2;
     private Tile[][] tiles;
     private Vector2 indexPosition;
     private Vector2 chunkCoords;
+    private ArrayList<Entity> entities;
 
     public Chunk(Vector2 chunkCoords) {
         this.chunkCoords = chunkCoords;
         this.indexPosition = new Vector2(chunkCoords.x * CHUNK_SIZE, chunkCoords.y * CHUNK_SIZE);
         this.tiles = new Tile[CHUNK_SIZE][CHUNK_SIZE];
+        this.entities = new ArrayList<>();
     }
 
     public void setTileLocalCoords(Tile tile, int x, int y) {
@@ -41,7 +46,22 @@ public class Chunk {
     }
     public int getWorldX() {return (int)(getIndexX() * TILE_SIZE);}
     public int getWorldY() {return (int)(getIndexY() * TILE_SIZE);}
+    public ArrayList<Entity> getEntities() {return entities;}
     public Vector2 getChunkCoords() {return chunkCoords;}
+
+    public boolean isWithinChunk(Vector2 worldPos) {
+        return isWithinChunk(worldPos.x, worldPos.y);
+    }
+
+    public boolean isWithinChunk(float worldX, float worldY) {
+        float chunkWorldX = indexPosition.x * TILE_SIZE;
+        float chunkWorldY = indexPosition.y * TILE_SIZE;
+        float chunkSizeInPixels = CHUNK_SIZE * TILE_SIZE;
+
+        return worldX >= chunkWorldX && worldX < chunkWorldX + chunkSizeInPixels
+            && worldY >= chunkWorldY && worldY < chunkWorldY + chunkSizeInPixels;
+    }
+
 
 
     protected void renderTextures()
@@ -75,5 +95,10 @@ public class Chunk {
                 tiles[x][y].renderOutline();
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Chunk: " + chunkCoords;
     }
 }
