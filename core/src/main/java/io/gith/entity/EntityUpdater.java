@@ -27,8 +27,18 @@ public class EntityUpdater implements Updatable
 
     @Override
     public void update(float dt) {
+        checkHealthDespawnActionOnZeroOrLess();
         applyVelocity(dt);
         updateHitbox();
+    }
+
+    /**
+     * Despawns entity if health is equal or below zero.
+     */
+    private void checkHealthDespawnActionOnZeroOrLess() {
+        if (entity.currentHealth <= 0) {
+            entity.despawn();
+        }
     }
 
     private void applyVelocity(float dt) {

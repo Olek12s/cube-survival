@@ -27,6 +27,12 @@ public abstract class Entity implements Spawnable
     protected float speed = 400f;
     protected boolean isWalking;
     protected EntityID id;
+    protected float currentHealth;
+    protected float currentEnergy;
+
+    // TODO: turn into JSON values
+    private float maxHealth = 20;
+    private float maxEnergy = 20;
 
     public Entity(EntityID id, Vector2 worldPosition) {
         this.id = id;
@@ -35,6 +41,8 @@ public abstract class Entity implements Spawnable
         this.worldPosition = worldPosition;
         this.velocity = new Vector2(0, 0);
         this.behaviors = new ArrayList<>();
+        this.currentHealth = maxHealth;
+        this.currentEnergy = maxEnergy;
         float[] vertices = new float[]{
             0,0,
             16,0,

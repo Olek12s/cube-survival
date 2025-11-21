@@ -7,16 +7,22 @@ public interface Spawnable extends Updatable, Renderable
 
     default void spawn() {
         if (isSpawned()) return;
-        Main.getInstance().getRenderables().add(this);
-        Main.getInstance().getUpdatables().add(this);
         setSpawned(true);
+
+        Main m = Main.getInstance();
+        m.getToAddRenderables().add(this);
+        m.getToAddUpdatables().add(this);
     }
+
     default void despawn() {
         if (!isSpawned()) return;
-        Main.getInstance().getRenderables().remove(getRenderer());
-        Main.getInstance().getUpdatables().remove(getUpdater());
         setSpawned(false);
+
+        Main m = Main.getInstance();
+        m.getToRemoveRenderables().add(this);
+        m.getToRemoveUpdatables().add(this);
     }
+
 
     boolean isSpawned();
     void setSpawned(boolean value);

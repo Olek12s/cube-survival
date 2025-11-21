@@ -25,8 +25,16 @@ public class Main extends Game
 
     public SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
-    private ArrayList<Updatable> updatables;
-    private ArrayList<Renderable> renderables;
+
+    private ArrayList<Updatable> updatables = new ArrayList<>();
+    private ArrayList<Renderable> renderables = new ArrayList<>();
+
+    private ArrayList<Updatable> toAddUpdatables = new ArrayList<>();
+    private ArrayList<Renderable> toAddRenderables = new ArrayList<>();
+
+    private ArrayList<Updatable> toRemoveUpdatables = new ArrayList<>();
+    private ArrayList<Renderable> toRemoveRenderables = new ArrayList<>();
+
 
     ///////////////////     main loop       ///////////////////
     public static int MAX_UPS = 75;   // logic updates per second
@@ -62,8 +70,6 @@ public class Main extends Game
     {
         if (instance == null) instance = this;
 
-        updatables = new ArrayList<>();
-        renderables = new ArrayList<>();
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
@@ -98,6 +104,19 @@ public class Main extends Game
             accumulator -= logicInterval;
             updatesThisFrame++;
         }
+
+        // --- APPLY SPAWN/DESPAWN QUEUES ---
+        updatables.addAll(toAddUpdatables);
+        renderables.addAll(toAddRenderables);
+
+        updatables.removeAll(toRemoveUpdatables);
+        renderables.removeAll(toRemoveRenderables);
+
+        toAddUpdatables.clear();
+        toAddRenderables.clear();
+        toRemoveUpdatables.clear();
+        toRemoveRenderables.clear();
+
 
         long updateEnd = System.nanoTime();
         lastUpdateTimeUs = (updateEnd - updateStart) / 1_000f; // µs
