@@ -13,10 +13,12 @@ public class Assets
     private final AssetManager manager = new AssetManager();
     private TextureAtlas tilesAtlas;
     private TextureAtlas entitiesAtlas;
+    private TextureAtlas GUIAtlas;
 
     public Assets() {
         loadTileTextures();
         loadEntityTextures();
+        loadGUITextures();
     }
 
 
@@ -26,6 +28,7 @@ public class Assets
     public TextureRegion getEntityRegion(String name) {
         return entitiesAtlas.findRegion(name);
     }
+    public TextureRegion getGUIRegion(String name) { return GUIAtlas.findRegion(name); }
 
 
     private void loadTileTextures() {
@@ -38,5 +41,11 @@ public class Assets
         manager.load("entities.atlas", TextureAtlas.class);
         manager.finishLoading();
         entitiesAtlas = manager.get("entities.atlas", TextureAtlas.class);
+    }
+
+    private void loadGUITextures() {
+        manager.load("gui.atlas", TextureAtlas.class);
+        manager.finishLoading();
+        GUIAtlas = manager.get("gui.atlas", TextureAtlas.class);
     }
 }

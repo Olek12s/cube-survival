@@ -1,8 +1,10 @@
 package io.gith.entity.entity;
 
 import com.badlogic.gdx.math.Vector2;
+import io.gith.Main;
 import io.gith.Spawnable;
 import io.gith.entity.behavior.Behavior;
+import io.gith.entity.inventory.Inventory;
 import io.gith.tile.Chunk;
 import io.gith.utils.Direction;
 import io.gith.utils.Hitbox;
@@ -32,6 +34,7 @@ public abstract class Entity implements Spawnable
     protected EntityID id;
     protected float currentHealth;
     protected float currentEnergy;
+    protected Inventory inventory;
 
     // TODO: turn into JSON values
     private float maxHealth = 20;
@@ -46,6 +49,8 @@ public abstract class Entity implements Spawnable
         this.behaviors = new ArrayList<>();
         this.currentHealth = maxHealth;
         this.currentEnergy = maxEnergy;
+        this.inventory = new Inventory(this);
+
 
         int frameSize = 16;
         int hitboxSize = 14;

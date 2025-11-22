@@ -8,5 +8,6 @@ public class Packer
     public static void main(String[] args) {
         TexturePacker.process("assets/tiles", "assets", "tiles");
         TexturePacker.process("assets/entities", "assets", "entities");
+        TexturePacker.process("assets/gui", "assets", "gui");
     }
 }

@@ -1,5 +1,6 @@
 package io.gith.entity.inventory;
 
+import io.gith.Main;
 import io.gith.Updatable;
 
 public class InventoryUpdater implements Updatable
@@ -8,6 +9,7 @@ public class InventoryUpdater implements Updatable
 
     public InventoryUpdater(Inventory inventory) {
         this.inventory = inventory;
+        Main.getInstance().getUpdatables().add(this);
     }
 
     @Override

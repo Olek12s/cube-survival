@@ -1,7 +1,8 @@
 package io.gith;
 
 public enum Order {
-    TILE(5);
+    TILE(5),
+    GUI(6);
 
 
     private final int value;
