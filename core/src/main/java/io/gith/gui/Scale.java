@@ -2,9 +2,9 @@ package io.gith.gui;
 
 public enum Scale
 {
-    SMALL(1),
-    MEDIUM(1.5f),
-    LARGE(2);
+    SMALL(1.5f),
+    MEDIUM(2f),
+    LARGE(3);
 
     private final float scale;
 

@@ -30,6 +30,7 @@ public class InventoryRenderer extends GUI implements Renderable
 
         renderInventoryBackground();
         renderButtons();
+        renderArmorSlots();
         for (Slot slot : inventory.getSlots()) {
             renderSlot(slot);
         }

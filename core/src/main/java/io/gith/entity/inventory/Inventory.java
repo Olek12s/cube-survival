@@ -11,6 +11,7 @@ public class Inventory {
     private final int slotsWidth = 10;
     private final int slotsHeight = 5;
     private final ArrayList<Slot> slots;
+    private final ArrayList<Slot> armorSlots;
 
     public int getSize() { return slotsWidth * slotsHeight; }
 
@@ -23,9 +24,15 @@ public class Inventory {
     public Inventory(Entity entity) {
         this.entity = entity;
         int size = slotsWidth * slotsHeight;
+
         this.slots = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             slots.add(new Slot(this, i));
+        }
+
+        this.armorSlots = new ArrayList<>(4);
+        for (int i = 0; i < 4; i++) {
+            armorSlots.add(new Slot(this, -1)); // armor slots don't use index
         }
     }
 }
