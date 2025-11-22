@@ -179,7 +179,7 @@ public class EntityUpdater implements Updatable
         if (entity.getCurrentChunk() == null) {
             if (currentChunk != null) {
                 entity.setCurrentChunk(currentChunk);
-                System.out.println("Added not associated entity to the: " + currentChunk);
+                // System.out.println("Added not associated entity to the: " + currentChunk);
                 currentChunk.getEntities().add(entity);
             }
             return;
@@ -192,11 +192,11 @@ public class EntityUpdater implements Updatable
             // add entity to the new chunk
             if (currentChunk != null) {
                 entity.setCurrentChunk(currentChunk);
-                System.out.println("Entity changed chunk to the: " + currentChunk);
+                // System.out.println("Entity changed chunk to the: " + currentChunk);
                 currentChunk.getEntities().add(entity);
             }
             else {
-                System.out.println("Entity changed chunk to null");
+                // System.out.println("Entity changed chunk to null");
                 entity.setCurrentChunk(null);   // if chunk was not loaded - set chunk to the null
             }
         }
