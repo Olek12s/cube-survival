@@ -1,9 +1,8 @@
 package io.gith.entity.entity;
 
 import com.badlogic.gdx.math.Vector2;
-import io.gith.Main;
 import io.gith.Spawnable;
-import io.gith.entity.behavior.Behavior;
+import io.gith.entity.action.Action;
 import io.gith.entity.inventory.Inventory;
 import io.gith.tile.Chunk;
 import io.gith.utils.Direction;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 @Setter
 public abstract class Entity implements Spawnable
 {
-    protected final ArrayList<Behavior> behaviors;
+    protected final ArrayList<Action> behaviors;
     private Chunk currentChunk;
     protected final EntityRenderer entityRenderer;
     protected final EntityUpdater entityUpdater;
@@ -32,6 +31,8 @@ public abstract class Entity implements Spawnable
     protected float movementDeacceleration = 0.33f;  // % max speed per tick
     protected boolean isWalking;
     protected EntityID id;
+
+    protected float currentArmor;
     protected float currentHealth;
     protected float currentEnergy;
     protected Inventory inventory;
@@ -39,6 +40,7 @@ public abstract class Entity implements Spawnable
     // TODO: turn into JSON values
     private float maxHealth = 20;
     private float maxEnergy = 20;
+    private float baseDamage = 1f;
 
     public Entity(EntityID id, Vector2 worldPosition) {
         this.id = id;
@@ -70,6 +72,16 @@ public abstract class Entity implements Spawnable
         spawn();
     }
 
+    public void receiveDamage(float damage, boolean trueDamage) {
+        if (!trueDamage) {
+            float finalDamage = damage * (100f / (100f + currentArmor));
+            currentHealth -= Math.max(0, finalDamage);
+        }
+        else {
+            this.currentHealth -= Math.max(0, currentHealth - damage);
+        }
+    }
+
     @Override
     public void spawn() {
 
@@ -85,7 +97,7 @@ public abstract class Entity implements Spawnable
     public void update(float dt) {
         entityUpdater.update(dt);
 
-        for (Behavior b : behaviors) {
+        for (Action b : behaviors) {
             b.tick(dt);
         }
     }
@@ -93,8 +105,6 @@ public abstract class Entity implements Spawnable
     public Vector2 getMovementInput() {
         return Vector2.Zero; // default: no input
     }
-
-
 
 
     @Override

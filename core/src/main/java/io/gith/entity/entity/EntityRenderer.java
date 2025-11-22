@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 import io.gith.CameraController;
 import io.gith.Main;
 import io.gith.Renderable;
-import io.gith.entity.behavior.Behavior;
-import io.gith.entity.behavior.Follow;
+import io.gith.entity.action.Action;
+import io.gith.entity.action.Follow;
 import io.gith.tile.Tile;
 import io.gith.utils.Direction;
 
@@ -74,7 +74,7 @@ public class EntityRenderer implements Renderable
     }
 
     private void renderFollowPathDebug(ShapeRenderer shapeRenderer) {
-        for (Behavior behavior : entity.getBehaviors()) {
+        for (Action behavior : entity.getBehaviors()) {
             if (behavior instanceof Follow follow) {
                 ArrayList<Tile> path = follow.getPath();
                 if (path == null || path.isEmpty()) return;

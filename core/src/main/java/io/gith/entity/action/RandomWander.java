@@ -1,10 +1,10 @@
-package io.gith.entity.behavior;
+package io.gith.entity.action;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.entity.entity.Entity;
 
-public class RandomWander implements Behavior
+public class RandomWander implements Action
 {
     private Entity entity;
 

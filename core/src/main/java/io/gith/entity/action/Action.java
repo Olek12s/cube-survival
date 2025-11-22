@@ -1,8 +1,8 @@
-package io.gith.entity.behavior;
+package io.gith.entity.action;
 
 import io.gith.entity.entity.Entity;
 
-public interface Behavior
+public interface Action
 {
     void start();
     void tick(float dt);

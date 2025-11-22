@@ -1,4 +1,4 @@
-package io.gith.entity.behavior;
+package io.gith.entity.action;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 @Getter
-public class Follow implements Behavior {
+public class Follow implements Action {
     private Entity entity;
     private final Vector2 positionToFollow;
     private ArrayList<Tile> tilePath;

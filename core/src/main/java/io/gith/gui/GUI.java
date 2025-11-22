@@ -161,46 +161,6 @@ public class GUI
         }
     }
 
-    /** Renders single armor slot on right side of inventory */
-    private void renderArmorSlot(Slot slot, int armorIndex, int armorCount) {
-        SpriteBatch batch = Main.getInstance().getBatch();
-        TextureRegion region = Main.getInstance().getAssetsController().getGUIRegion("slot");
-
-        int invCols = inventoryUI.getInventory().getSlotsWidth();
-        int invRows = inventoryUI.getInventory().getSlotsHeight();
-
-        float slotSize = BASE_SLOTSIZE * scale.getValue();
-        float padding = BASE_PADDING * scale.getValue();
-
-        // Inventory total size
-        float invWidth = invCols * slotSize + (invCols - 1) * padding;
-        float invHeight = invRows * slotSize + (invRows - 1) * padding;
-
-        float invStartX = (VIRTUAL_GUI_WIDTH - invWidth) / 2f;
-        float invStartY = (VIRTUAL_GUI_HEIGHT - invHeight) / 2f;
-
-        // Armor group total height
-        float totalArmorHeight = armorCount * slotSize + (armorCount - 1) * padding;
-
-        // Center armor column vertically
-        float armorStartY = invStartY + (invHeight - totalArmorHeight) / 2f;
-
-        // Position for this armor slot
-        float armorX = invStartX + invWidth + padding * 4f;
-        float armorY = armorStartY + (armorCount - 1 - armorIndex) * (slotSize + padding);
-
-        float sx = Main.getInstance().getGuiCamera().viewportWidth / VIRTUAL_GUI_WIDTH;
-        float sy = Main.getInstance().getGuiCamera().viewportHeight / VIRTUAL_GUI_HEIGHT;
-
-        batch.draw(
-            region,
-            armorX * sx,
-            armorY * sy,
-            slotSize * sx,
-            slotSize * sy
-        );
-    }
-
 
     /** ============================================================
      * TOP BUTTON BAR

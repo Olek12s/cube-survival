@@ -33,6 +33,7 @@ public class EntityUpdater implements Updatable
         applyVelocity(dt);
         updateHitbox();
         updateChunkAssocation();
+
     }
 
     /**
@@ -118,7 +119,6 @@ public class EntityUpdater implements Updatable
         }
         entity.getWorldPosition().set(newPos);
     }
-
     private boolean collidesAtPosition(Vector2 position) {
         var tileMap = Main.getInstance().getTileMap();
         float tileSize = CameraController.TILE_SIZE;

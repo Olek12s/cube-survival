@@ -2,14 +2,14 @@ package io.gith.entity.entity;
 
 import com.badlogic.gdx.math.Vector2;
 import io.gith.Main;
-import io.gith.entity.behavior.Behavior;
-import io.gith.entity.behavior.Follow;
-import io.gith.entity.behavior.RandomWander;
+import io.gith.entity.action.Action;
+import io.gith.entity.action.Follow;
+import io.gith.entity.action.RandomWander;
 
 public class Slime extends Entity
 {
-    private final Behavior wander;
-    private final Behavior follow;
+    private final Action wander;
+    private final Action follow;
 
     public Slime(Vector2 worldPosition) {
         super(EntityID.SLIME, worldPosition);
