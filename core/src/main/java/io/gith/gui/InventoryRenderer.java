@@ -1,9 +1,12 @@
-package io.gith.entity.inventory;
+package io.gith.gui;
 
 import io.gith.Main;
 import io.gith.Order;
 import io.gith.Renderable;
 import io.gith.RenderingOrder;
+import io.gith.entity.entity.Player;
+import io.gith.entity.inventory.Inventory;
+import io.gith.entity.inventory.Slot;
 
 import java.util.ArrayList;
 
@@ -19,11 +22,10 @@ public class InventoryRenderer implements Renderable
 
     @Override
     public void renderTexture() {
-        ArrayList<Slot> slots = inventory.getSlots();
+        Player player = (Player) inventory.getEntity();
+        if (!player.getInventoryUI().isOpen()) return;
 
-        for (Slot slot : slots) {
-            slot.render();
-        }
+        inventory.getSlots().forEach(SlotUI::renderSlot);
     }
 
     @Override
