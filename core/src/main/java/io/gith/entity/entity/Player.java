@@ -20,7 +20,7 @@ public class Player extends Entity
 
         InventoryRenderer renderer = new InventoryRenderer(inventory);
         Main.getInstance().getRenderablesGUI().add(renderer);
-        this.gui = new GUI(this);
+        this.gui = new GUI(inventory);
         speed = 120f;
     }
 

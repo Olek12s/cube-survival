@@ -1,7 +1,9 @@
 package io.gith.gui;
 
 import io.gith.entity.inventory.Inventory;
+import lombok.Getter;
 
+@Getter
 public class InventoryUI
 {
     private final Inventory inventory;

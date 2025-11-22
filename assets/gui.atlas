@@ -11,6 +11,13 @@ background
   orig: 64, 64
   offset: 0, 0
   index: -1
+button
+  rotate: false
+  xy: 2, 68
+  size: 192, 43
+  orig: 192, 43
+  offset: 0, 0
+  index: -1
 slot
   rotate: false
   xy: 68, 2
