@@ -2,9 +2,7 @@ package io.gith.entity.behavior;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import io.gith.entity.Entity;
-import io.gith.entity.EntityUpdater;
-import io.gith.utils.Direction;
+import io.gith.entity.entity.Entity;
 
 public class RandomWander implements Behavior
 {

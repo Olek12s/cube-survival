@@ -1,9 +1,7 @@
-package io.gith.entity;
+package io.gith.entity.entity;
 
 import com.badlogic.gdx.math.Vector2;
-import io.gith.Renderable;
 import io.gith.Spawnable;
-import io.gith.Updatable;
 import io.gith.entity.behavior.Behavior;
 import io.gith.tile.Chunk;
 import io.gith.utils.Direction;

@@ -1,4 +1,4 @@
-package io.gith.entity;
+package io.gith.entity.entity;
 
 public enum EntityID
 {

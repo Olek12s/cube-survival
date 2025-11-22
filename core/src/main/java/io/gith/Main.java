@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
-import io.gith.entity.Entity;
-import io.gith.entity.Player;
-import io.gith.entity.Slime;
+import io.gith.entity.entity.Entity;
+import io.gith.entity.entity.Player;
+import io.gith.entity.entity.Slime;
 import io.gith.tile.TileMapController;
 import lombok.Getter;
 

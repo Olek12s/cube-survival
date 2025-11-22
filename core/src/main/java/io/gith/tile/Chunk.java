@@ -3,7 +3,7 @@ package io.gith.tile;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.Main;
-import io.gith.entity.Entity;
+import io.gith.entity.entity.Entity;
 
 import java.util.ArrayList;
 

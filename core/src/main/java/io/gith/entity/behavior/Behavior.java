@@ -1,7 +1,6 @@
 package io.gith.entity.behavior;
 
-import io.gith.Updatable;
-import io.gith.entity.Entity;
+import io.gith.entity.entity.Entity;
 
 public interface Behavior
 {

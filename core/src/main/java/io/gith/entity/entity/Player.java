@@ -1,9 +1,8 @@
-package io.gith.entity;
+package io.gith.entity.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import io.gith.utils.Direction;
 import lombok.Getter;
 
 @Getter
