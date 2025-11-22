@@ -40,17 +40,23 @@ public class EntityUpdater implements Updatable
 
     private void attackTarget(float dt) {
         Entity player = Main.getInstance().getPlayer();
-        Vector2 toPlayer = player.getWorldPosition().cpy().sub(entity.worldPosition);
-        float distance = toPlayer.len();
+
+        Vector2 sourceCenter = entity.getHitbox().getMiddlePoint();
+        Vector2 targetCenter = player.getHitbox().getMiddlePoint();
+
+        float distance = sourceCenter.dst(targetCenter);
 
         if (distance <= Attack.MELEE_ATTACK_RANGE) {
+            System.out.println(distance);
+            System.out.println(Attack.MELEE_ATTACK_RANGE);
             if (currentAttack == null || currentAttack.isFinished()) {
                 currentAttack = new Attack(entity, player);
+                entity.behaviors.add(currentAttack);
                 currentAttack.start();
             }
-
             currentAttack.tick(dt);
-        } else {
+        }
+        else {
             if (currentAttack != null && !currentAttack.isFinished()) {
                 currentAttack.end();
             }

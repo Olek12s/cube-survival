@@ -38,7 +38,7 @@ public abstract class Entity implements Spawnable
     protected Inventory inventory;
 
     // TODO: turn into JSON values
-    private float maxHealth = 20;
+    private float maxHealth = 200;
     private float maxEnergy = 20;
     private float baseDamage = 1f;
 

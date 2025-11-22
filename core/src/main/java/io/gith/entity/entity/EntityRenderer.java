@@ -10,9 +10,11 @@ import io.gith.CameraController;
 import io.gith.Main;
 import io.gith.Renderable;
 import io.gith.entity.action.Action;
+import io.gith.entity.action.Attack;
 import io.gith.entity.action.Follow;
 import io.gith.tile.Tile;
 import io.gith.utils.Direction;
+import io.gith.utils.Hitbox;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -71,6 +73,7 @@ public class EntityRenderer implements Renderable
         shapeRenderer.polygon(entity.getHitbox().getPolygon().getTransformedVertices());
 
         renderFollowPathDebug(shapeRenderer);
+        renderAttackHitboxDebug(shapeRenderer);
     }
 
     private void renderFollowPathDebug(ShapeRenderer shapeRenderer) {
@@ -89,6 +92,17 @@ public class EntityRenderer implements Renderable
                     shapeRenderer.rect(pos.x, pos.y, tileSize, tileSize);
                 }
 
+            }
+        }
+    }
+    public void renderAttackHitboxDebug(ShapeRenderer shapeRenderer){
+        for (Action behavior : entity.getBehaviors()) {
+            if (behavior instanceof Attack attack) {
+                Hitbox hb = attack.getAttackHitbox();
+                if (hb != null) {
+                    shapeRenderer.setColor(1f, 0f, 0.3f, 0.95f);
+                    shapeRenderer.polygon(hb.getPolygon().getTransformedVertices());
+                }
             }
         }
     }

@@ -14,6 +14,7 @@ public class Attack implements Action
 
     private Entity entitySource;
     private Entity entityTarget;
+    private Hitbox attackHitbox;
 
     private float timer = 0f;
     private float randomAttackWaitInterval = 0.5f;  // entity will attack player within [0s, 0.5s] when possible
@@ -40,6 +41,13 @@ public class Attack implements Action
     public void tick(float dt) {
         if (attackLaunched) return;
 
+        Vector2 sourceCenter = entitySource.getHitbox().getMiddlePoint();
+        Vector2 targetCenter = entityTarget.getHitbox().getMiddlePoint();
+        float distance = sourceCenter.dst(targetCenter);
+        if (distance > MELEE_ATTACK_RANGE) {
+            return;
+        }
+
         timer += dt;
         if (timer >= randomAttackWaitInterval) {
 
@@ -50,11 +58,9 @@ public class Attack implements Action
                 MELEE_ATTACK_WIDTH / 2f, MELEE_ATTACK_RANGE,
                 -MELEE_ATTACK_WIDTH / 2f, MELEE_ATTACK_RANGE
             };
-            Hitbox attackHitbox = new Hitbox(attackVertices);
+            attackHitbox = new Hitbox(attackVertices);
 
             // Vector between source and target
-            Vector2 sourceCenter = entitySource.getHitbox().getMiddlePoint();
-            Vector2 targetCenter = entityTarget.getHitbox().getMiddlePoint();
             Vector2 dir = targetCenter.cpy().sub(sourceCenter).nor();
             float angleDeg = dir.angleDeg();
 
@@ -73,6 +79,7 @@ public class Attack implements Action
     @Override
     public void end() {
         attackLaunched = true;
+        entitySource.getBehaviors().remove(this);
     }
 
     @Override
