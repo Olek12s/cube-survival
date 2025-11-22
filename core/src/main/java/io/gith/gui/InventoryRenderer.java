@@ -23,7 +23,7 @@ public class InventoryRenderer implements Renderable
     @Override
     public void renderTexture() {
         Player player = (Player) inventory.getEntity();
-        if (!player.getInventoryUI().isOpen()) return;
+        if (!player.getGui().getInventoryUI().isOpen()) return;
 
         inventory.getSlots().forEach(SlotUI::renderSlot);
     }

@@ -9,7 +9,6 @@ public class InventoryUI
 
     public InventoryUI(Inventory inventory) {
         this.inventory = inventory;
-
     }
 
     public void toggle()
