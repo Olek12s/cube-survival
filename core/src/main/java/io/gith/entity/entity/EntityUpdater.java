@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import io.gith.CameraController;
 import io.gith.Main;
 import io.gith.Updatable;
+import io.gith.entity.action.Attack;
 import io.gith.tile.Chunk;
 import io.gith.tile.Tile;
 import io.gith.tile.TileMapController;
@@ -18,6 +19,7 @@ import lombok.Setter;
 public class EntityUpdater implements Updatable
 {
     private Entity entity;
+    private Attack currentAttack = null;
     private final Vector2 movementVelocity = new Vector2();
 
 
@@ -33,7 +35,27 @@ public class EntityUpdater implements Updatable
         applyVelocity(dt);
         updateHitbox();
         updateChunkAssocation();
+        attackTarget(dt);
+    }
 
+    private void attackTarget(float dt) {
+        Entity player = Main.getInstance().getPlayer();
+        Vector2 toPlayer = player.getWorldPosition().cpy().sub(entity.worldPosition);
+        float distance = toPlayer.len();
+
+        if (distance <= Attack.MELEE_ATTACK_RANGE) {
+            if (currentAttack == null || currentAttack.isFinished()) {
+                currentAttack = new Attack(entity, player);
+                currentAttack.start();
+            }
+
+            currentAttack.tick(dt);
+        } else {
+            if (currentAttack != null && !currentAttack.isFinished()) {
+                currentAttack.end();
+            }
+            currentAttack = null;
+        }
     }
 
     /**

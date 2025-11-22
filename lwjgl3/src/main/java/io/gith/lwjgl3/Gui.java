@@ -47,6 +47,12 @@ public class Gui implements Renderable
         ImGui.text(String.format("Render time: %.1f µs", Main.lastRenderTimeUs));
         ImGui.text(String.format("Frame (U+R) time: %.1f µs", Main.lastFrameTimeUs));
 
+        ImGui.separator();
+        ImGui.text(String.format("Armor: ", Main.getInstance().getPlayer().getCurrentArmor()));
+        ImGui.text(String.format("Health: %.0f/%,.0f",
+            Main.getInstance().getPlayer().getCurrentHealth(),
+            Main.getInstance().getPlayer().getMaxHealth()));
+
 
         ImGui.end();
     }

@@ -76,10 +76,12 @@ public abstract class Entity implements Spawnable
         if (!trueDamage) {
             float finalDamage = damage * (100f / (100f + currentArmor));
             currentHealth -= Math.max(0, finalDamage);
+            System.out.println("received damageL " + finalDamage);
         }
         else {
             this.currentHealth -= Math.max(0, currentHealth - damage);
         }
+        currentHealth = Math.max(0, currentHealth);
     }
 
     @Override

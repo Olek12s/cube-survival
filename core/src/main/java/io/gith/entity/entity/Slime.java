@@ -3,6 +3,7 @@ package io.gith.entity.entity;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.Main;
 import io.gith.entity.action.Action;
+import io.gith.entity.action.Attack;
 import io.gith.entity.action.Follow;
 import io.gith.entity.action.RandomWander;
 
@@ -20,7 +21,7 @@ public class Slime extends Entity
         this.wander.start();
         behaviors.add(wander);
 
-        speed = 180f;
+        speed = 75f;
 
         follow = new Follow(Main.getInstance().getPlayer().getWorldPosition());
         follow.setEntity(this);

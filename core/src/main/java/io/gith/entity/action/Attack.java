@@ -4,10 +4,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import io.gith.entity.entity.Entity;
 import io.gith.utils.Hitbox;
+import lombok.Getter;
 
+@Getter
 public class Attack implements Action
 {
-    private static final float MELEE_ATTACK_RANGE = 26;
+    public static final float MELEE_ATTACK_RANGE = 26;
     private static final float MELEE_ATTACK_WIDTH = 16;
 
     private Entity entitySource;
@@ -21,6 +23,9 @@ public class Attack implements Action
         this.entitySource = entitySource;
         this.entityTarget = entityTarget;
     }
+
+    public boolean isFinished() {return attackLaunched;}
+
 
     @Override
     public void start()
