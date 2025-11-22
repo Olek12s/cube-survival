@@ -3,12 +3,16 @@ package io.gith.gui;
 public enum Scale
 {
     SMALL(1),
-    MEDIUM(2),
-    LARGE(3);
+    MEDIUM(1.5f),
+    LARGE(2);
 
-    private final int scale;
+    private final float scale;
 
-    Scale(int scale) {
+    public float getValue() {
+        return scale;
+    }
+
+    Scale(float scale) {
         this.scale = scale;
     }
 }
