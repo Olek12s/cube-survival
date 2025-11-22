@@ -48,12 +48,19 @@ public abstract class Entity implements Spawnable
         this.behaviors = new ArrayList<>();
         this.currentHealth = maxHealth;
         this.currentEnergy = maxEnergy;
-        float[] vertices = new float[]{
-            0,0,
-            16,0,
-            16,16,
-            0,16,
+
+        int frameSize = 16;
+        int hitboxSize = 14;
+        float offsetX = (frameSize - hitboxSize) / 2f;
+        float offsetY = (frameSize - hitboxSize) / 2f;
+        float[] vertices = new float[] {
+            offsetX, offsetY,
+            offsetX + hitboxSize, offsetY,
+            offsetX + hitboxSize, offsetY + hitboxSize,
+            offsetX, offsetY + hitboxSize
         };
+        hitbox = new Hitbox(vertices);
+
 
         hitbox = new Hitbox(vertices);
         this.direction = Direction.DOWN;

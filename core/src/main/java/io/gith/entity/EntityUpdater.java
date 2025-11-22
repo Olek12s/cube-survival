@@ -118,8 +118,6 @@ public class EntityUpdater implements Updatable
         if (!collidesAtPosition(testY) && chunkY != null && chunkY.isWithinChunk(testY)) {
             newPos.y = testY.y;
         }
-
-
         entity.getWorldPosition().set(newPos);
     }
 
@@ -149,9 +147,28 @@ public class EntityUpdater implements Updatable
             }
         }
 
-        // checking other hitboxes
-        //
-        //
+        // checking other hitboxes within current chunk + 8 neighboring
+        Chunk currentChunk = entity.getCurrentChunk();
+
+        if (currentChunk != null) {
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    int neighborChunkX = (int) currentChunk.getChunkCoords().x + dx;
+                    int neighborChunkY = (int) currentChunk.getChunkCoords().y + dy;
+                    Chunk neighborChunk = tileMap.getChunkFromMap(neighborChunkX, neighborChunkY);
+                    if (neighborChunk == null) continue;
+
+                    for (Entity other : neighborChunk.getEntities()) {
+                        if (other == entity) continue; // don't check self
+                        if (testHitbox.overlaps(other.getHitbox())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+
         return false;
     }
     private void updateHitbox() {

@@ -25,7 +25,7 @@ public class Slime extends Entity
         follow = new Follow(Main.getInstance().getPlayer().getWorldPosition());
         follow.setEntity(this);
         follow.start();
-        //behaviors.add(follow);
+        behaviors.add(follow);
     }
 
     @Override

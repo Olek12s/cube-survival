@@ -65,6 +65,7 @@ public class TileMapController implements Renderable, Updatable
             }
         }
 
+        // TODO: make loading/unloading hcunks from hard drive (including entities)
         // remove chunks out of range
         // loadedChunks.keySet().removeIf(k -> !requiredChunks.contains(k));
 

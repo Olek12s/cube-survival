@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import static io.gith.CameraController.TILE_SIZE;
 
 public class Chunk {
-    public static final int CHUNK_SIZE = 2;
+    public static final int CHUNK_SIZE = 8;
     private Tile[][] tiles;
     private Vector2 indexPosition;
     private Vector2 chunkCoords;
